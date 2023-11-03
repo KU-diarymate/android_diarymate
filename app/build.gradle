@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'ku.kpro.scrapit'
+    namespace 'ku.kpro.diary_mate'
     compileSdk 34
 
     viewBinding {
@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "ku.kpro.scrapit"
+        applicationId "ku.kpro.diary_mate"
         minSdk 26
         targetSdk 34
         versionCode 1

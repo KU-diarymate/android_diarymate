@@ -1,4 +1,4 @@
-package ku.kpro.scrapit
+package ku.kpro.diary_mate
 
 import org.junit.Test
 

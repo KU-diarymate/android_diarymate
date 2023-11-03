@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "scrapIT"
+rootProject.name = "diary_mate"
 include ':app'

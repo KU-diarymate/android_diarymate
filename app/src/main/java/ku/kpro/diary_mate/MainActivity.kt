@@ -1,4 +1,4 @@
-package ku.kpro.scrapit
+package ku.kpro.diary_mate
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import ku.kpro.scrapit.databinding.ActivityMainBinding
+import ku.kpro.diary_mate.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

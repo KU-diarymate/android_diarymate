@@ -1,4 +1,4 @@
-package ku.kpro.scrapit
+package ku.kpro.diary_mate
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
