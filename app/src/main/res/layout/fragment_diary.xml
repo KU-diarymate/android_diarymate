@@ -3,14 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    
+    <ImageView
+        android:id="@+id/diary_icon_iv"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/icon_clover"
+        app:tint="@color/green_theme"/>
+    
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Diary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="다이어리 메이트"
+        app:layout_constraintTop_toTopOf="@id/diary_icon_iv"
+        app:layout_constraintBottom_toBottomOf="@id/diary_icon_iv"
+        app:layout_constraintStart_toEndOf="@id/diary_icon_iv"
+        android:layout_marginStart="10dp"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
