@@ -2,7 +2,6 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.ScrapIT" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/white</item>
-        <item name="fontFamily">sans-serif</item>
     </style>
 
     <style name="Theme.ScrapIT" parent="Base.Theme.ScrapIT" />
