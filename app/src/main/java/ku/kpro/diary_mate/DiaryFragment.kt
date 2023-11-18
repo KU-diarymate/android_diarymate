@@ -1,14 +1,18 @@
 package ku.kpro.diary_mate
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import ku.kpro.diary_mate.databinding.FragmentDiaryBinding
 import java.text.DateFormatSymbols
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 class DiaryFragment : Fragment() {
 
@@ -21,12 +25,24 @@ class DiaryFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentDiaryBinding.inflate(inflater, container, false)
 
-        binding.diaryCalendarMonthNumberTv.text = DateFormatSymbols().months[calendar.get(Calendar.MONTH)]
+        binding.diaryCalendarMonthNumberTv.text = (calendar.get(Calendar.MONTH) + 1).toString() + "월"
         binding.diaryCalendarMonthWordTv.text = monthArray[calendar.get(Calendar.MONTH)]
         binding.diaryCalendarYearTv.text = calendar.get(Calendar.YEAR).toString() + "년"
+        binding.diaryCustomCalendar.setOnCalendarTouchListener(object : CustomCalendarView.OnCalendarTouchListener {
+            override fun getSelectedDate(date: Int) {
+                calendar.set(Calendar.DAY_OF_MONTH, date)
+                if(Calendar.getInstance().after(calendar)) {
+                    val dateString =
+                        SimpleDateFormat("yyyy년 MM월 dd일 E요일", Locale.KOREA).format(calendar.time)
+                    val intent = Intent(activity, DiaryActivity::class.java)
+                    intent.putExtra("date", dateString)
+                    startActivity(intent)
+                }
+            }
+        })
 
         return binding.root
     }

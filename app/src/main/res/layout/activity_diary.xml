@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <ImageButton
+        android:id="@+id/diary_activity_back_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/back_btn"
+        android:background="@color/transparent"
+        android:scaleType="fitCenter"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"/>
+    
+    <TextView
+        android:id="@+id/diary_activity_mode_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="읽기 모드"
+        app:layout_constraintTop_toTopOf="@id/diary_activity_back_btn"
+        app:layout_constraintBottom_toBottomOf="@id/diary_activity_back_btn"
+        app:layout_constraintStart_toEndOf="@id/diary_activity_back_btn"
+        android:fontFamily="@font/pretendard_regular"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/black"/>
+    
+    <ImageButton
+        android:id="@+id/diary_activity_write_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:scaleType="fitCenter"
+        android:background="@drawable/icon_pen"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toTopOf="@id/diary_activity_back_btn"
+        app:layout_constraintBottom_toBottomOf="@id/diary_activity_back_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"/>
+
+    <TextView
+        android:id="@+id/diary_activity_date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2023년 10월 10일 화요일"
+        android:textSize="25dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/diary_activity_back_btn"
+        app:layout_constraintTop_toBottomOf="@id/diary_activity_back_btn"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="5dp"/>
+    
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/diary_activity_hashtag_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/diary_activity_date_tv"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="10dp"
+        tools:listitem="@layout/item_hashtag"
+        tools:itemCount="2"/>
+    
+    <View
+        android:id="@+id/diary_activity_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/diary_activity_hashtag_rv"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/diary_activity_line"
+        android:layout_margin="10dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:enabled="false"
+                android:id="@+id/diary_activity_write_area_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:lineSpacingExtra="7dp"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
