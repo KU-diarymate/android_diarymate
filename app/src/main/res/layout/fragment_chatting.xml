@@ -1,16 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="10dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chatting"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!-- RecyclerView: 메시지 목록을 표시하는 뷰 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:scrollbars="none"
+        tools:listitem="@layout/item_chatting_chatbot"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- 메시지 입력창과 전송 버튼을 담은 레이아웃 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <!-- 메시지 입력창 -->
+        <EditText
+            android:id="@+id/chatting_message_et"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/background_chatting_edit"/>
+
+        <!-- 전송 버튼 -->
+        <ImageButton
+            android:id="@+id/chatting_send_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/send"
+            android:background="@drawable/background_send_btn"
+            android:backgroundTint="@color/green_theme"
+            android:scaleType="fitCenter"/>
+
+    </LinearLayout>
+</LinearLayout>
