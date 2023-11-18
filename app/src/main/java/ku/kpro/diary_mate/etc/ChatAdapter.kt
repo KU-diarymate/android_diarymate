@@ -1,17 +1,18 @@
-package ku.kpro.diary_mate
+package ku.kpro.diary_mate.etc
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ku.kpro.diary_mate.R
+import ku.kpro.diary_mate.data.ChatMessage
 
 class ChatAdapter(private val messages: List<ChatMessage>) : RecyclerView.Adapter<ChatAdapter.MessageViewHolder>() {
 
     // ViewHolder 클래스를 정의합니다.
     class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val senderTextView: TextView = itemView.findViewById(R.id.senderTextView)
-        val messageTextView: TextView = itemView.findViewById(R.id.messageTextView)
+//        val senderTextView: TextView = itemView.findViewById(R.id.senderTextView)
+//        val messageTextView: TextView = itemView.findViewById(R.id.messageTextView)
     }
 
     // onCreateViewHolder 메서드: ViewHolder 객체를 생성하여 반환합니다.
@@ -23,8 +24,8 @@ class ChatAdapter(private val messages: List<ChatMessage>) : RecyclerView.Adapte
     // onBindViewHolder 메서드: 각 아이템의 데이터를 ViewHolder에 바인딩합니다.
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val message = messages[position]
-        holder.senderTextView.text = message.sender
-        holder.messageTextView.text = message.message
+//        holder.senderTextView.text = message.sender
+//        holder.messageTextView.text = message.message
     }
 
     // getItemCount 메서드: 아이템의 개수를 반환합니다.

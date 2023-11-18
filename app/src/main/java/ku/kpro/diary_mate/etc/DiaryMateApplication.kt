@@ -1,4 +1,4 @@
-package ku.kpro.diary_mate
+package ku.kpro.diary_mate.etc
 
 import android.app.Application
 import io.realm.Realm

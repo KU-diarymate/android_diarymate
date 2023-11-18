@@ -1,4 +1,4 @@
-package ku.kpro.diary_mate
+package ku.kpro.diary_mate.data
 
 import io.realm.RealmList
 import io.realm.RealmObject

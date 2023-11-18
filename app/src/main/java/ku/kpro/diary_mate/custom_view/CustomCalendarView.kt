@@ -1,4 +1,4 @@
-package ku.kpro.diary_mate
+package ku.kpro.diary_mate.custom_view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,10 +8,10 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import ku.kpro.diary_mate.R
 import java.util.Calendar
 import java.util.Date
 

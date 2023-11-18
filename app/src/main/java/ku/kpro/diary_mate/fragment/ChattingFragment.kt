@@ -1,14 +1,13 @@
-package ku.kpro.diary_mate
+package ku.kpro.diary_mate.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import ku.kpro.diary_mate.etc.ChatAdapter
+import ku.kpro.diary_mate.data.ChatMessage
 import ku.kpro.diary_mate.databinding.FragmentChattingBinding
 
 class ChattingFragment : Fragment() {

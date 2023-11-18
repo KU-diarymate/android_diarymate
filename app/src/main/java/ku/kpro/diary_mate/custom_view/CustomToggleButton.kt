@@ -1,4 +1,4 @@
-package ku.kpro.diary_mate
+package ku.kpro.diary_mate.custom_view
 
 import android.content.Context
 import android.graphics.Canvas
@@ -8,6 +8,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
+import ku.kpro.diary_mate.R
 
 class CustomToggleButton(context : Context, attr : AttributeSet)
     : View(context, attr) {

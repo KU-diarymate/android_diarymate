@@ -1,4 +1,4 @@
-package ku.kpro.diary_mate
+package ku.kpro.diary_mate.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +8,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import ku.kpro.diary_mate.fragment.AnalysisFragment
+import ku.kpro.diary_mate.fragment.ChattingFragment
+import ku.kpro.diary_mate.fragment.DiaryFragment
+import ku.kpro.diary_mate.R
+import ku.kpro.diary_mate.fragment.SettingFragment
 import ku.kpro.diary_mate.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -28,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private fun navigationSelected(item: MenuItem): Boolean {
         val checked = item.setChecked(true)
         when (checked.itemId) {
-            R.id.diary_nav-> {
+            R.id.diary_nav -> {
                 binding.mainPager.currentItem = 0
                 return true
             }

@@ -1,4 +1,4 @@
-package ku.kpro.diary_mate
+package ku.kpro.diary_mate.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import ku.kpro.diary_mate.custom_view.CustomCalendarView
+import ku.kpro.diary_mate.activity.DiaryActivity
 import ku.kpro.diary_mate.databinding.FragmentDiaryBinding
-import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -31,7 +31,8 @@ class DiaryFragment : Fragment() {
         binding.diaryCalendarMonthNumberTv.text = (calendar.get(Calendar.MONTH) + 1).toString() + "월"
         binding.diaryCalendarMonthWordTv.text = monthArray[calendar.get(Calendar.MONTH)]
         binding.diaryCalendarYearTv.text = calendar.get(Calendar.YEAR).toString() + "년"
-        binding.diaryCustomCalendar.setOnCalendarTouchListener(object : CustomCalendarView.OnCalendarTouchListener {
+        binding.diaryCustomCalendar.setOnCalendarTouchListener(object :
+            CustomCalendarView.OnCalendarTouchListener {
             override fun getSelectedDate(date: Int) {
                 calendar.set(Calendar.DAY_OF_MONTH, date)
                 if(Calendar.getInstance().after(calendar)) {

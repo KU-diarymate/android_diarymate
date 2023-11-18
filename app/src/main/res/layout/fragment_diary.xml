@@ -75,7 +75,7 @@
         app:layout_constraintStart_toStartOf="@id/diary_calendar_month_number_tv"
         android:layout_marginTop="-7dp"/>
     
-    <ku.kpro.diary_mate.CustomCalendarView
+    <ku.kpro.diary_mate.custom_view.CustomCalendarView
         android:id="@+id/diary_custom_calendar"
         android:layout_width="match_parent"
         android:layout_height="400dp"

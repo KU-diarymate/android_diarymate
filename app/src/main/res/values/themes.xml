@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.ScrapIT" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.DiaryMate" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/white</item>
     </style>
 
-    <style name="Theme.ScrapIT" parent="Base.Theme.ScrapIT" />
+    <style name="Theme.DiaryMate" parent="Base.Theme.DiaryMate" />
 </resources>
