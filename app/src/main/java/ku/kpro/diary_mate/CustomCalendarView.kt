@@ -1,5 +1,6 @@
 package ku.kpro.diary_mate
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -7,6 +8,8 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import java.util.Calendar
@@ -14,6 +17,11 @@ import java.util.Date
 
 class CustomCalendarView(context : Context, attr : AttributeSet) : View(context, attr) {
 
+    interface OnCalendarTouchListener {
+        fun getSelectedDate(date : Int)
+    }
+
+    private var onCalendarTouchListener : OnCalendarTouchListener? = null
     private var lineInterval = 0f
     private val calendar = Calendar.getInstance()
     private val shiftDate : Int
@@ -66,6 +74,26 @@ class CustomCalendarView(context : Context, attr : AttributeSet) : View(context,
             canvas.drawText(day.toString(), widthPosition((day % 7 - 1 + shiftDate) % 7, day.toString()), heightPosition((day - 1 + shiftDate) / 7), paint)
             if(day == currentDate) paint.color = ContextCompat.getColor(context, R.color.grey)
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        try {
+            if(event.action == MotionEvent.ACTION_DOWN) {
+                val x = (event.x / lineInterval).toInt()
+                val y = ((event.y - 170f) / 140f).toInt()
+                val date = y * 7 + x + 1 - shiftDate
+                if(1 <= date && date <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+                    onCalendarTouchListener?.getSelectedDate(date)
+            }
+        } catch (e : Exception) {
+            e.printStackTrace()
+        }
+        return super.onTouchEvent(event)
+    }
+
+    fun setOnCalendarTouchListener(listener : OnCalendarTouchListener) {
+        onCalendarTouchListener = listener
     }
 
 }
