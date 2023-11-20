@@ -1,6 +1,8 @@
 package ku.kpro.diary_mate.fragment
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +19,7 @@ import java.util.Locale
 class DiaryFragment : Fragment() {
 
     private lateinit var binding : FragmentDiaryBinding
+    private lateinit var requireContext : Context
     private val calendar = Calendar.getInstance()
     private val monthArray = arrayOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 
@@ -28,6 +31,10 @@ class DiaryFragment : Fragment() {
     ): View {
         binding = FragmentDiaryBinding.inflate(inflater, container, false)
 
+        requireContext = this.requireContext()
+        binding.diaryCalendarMonthNumberTv.setOnClickListener {
+            showDatePickerDialog()
+        }
         binding.diaryCalendarMonthNumberTv.text = (calendar.get(Calendar.MONTH) + 1).toString() + "월"
         binding.diaryCalendarMonthWordTv.text = monthArray[calendar.get(Calendar.MONTH)]
         binding.diaryCalendarYearTv.text = calendar.get(Calendar.YEAR).toString() + "년"
@@ -47,4 +54,22 @@ class DiaryFragment : Fragment() {
 
         return binding.root
     }
+
+    private fun showDatePickerDialog() {
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val datePickerDialog = DatePickerDialog(
+            requireContext, DatePickerDialog.THEME_HOLO_LIGHT,
+            { _, selectedYear, selectedMonth, _ ->
+                calendar.set(selectedYear, selectedMonth, 1)
+                binding.diaryCustomCalendar.updateCalendar(calendar)
+                binding.diaryCalendarMonthNumberTv.text = (calendar.get(Calendar.MONTH) + 1).toString() + "월"
+                binding.diaryCalendarMonthWordTv.text = monthArray[calendar.get(Calendar.MONTH)]
+                binding.diaryCalendarYearTv.text = calendar.get(Calendar.YEAR).toString() + "년"
+            },
+            year, month, 1
+        )
+        datePickerDialog.show()
+    }
+
 }

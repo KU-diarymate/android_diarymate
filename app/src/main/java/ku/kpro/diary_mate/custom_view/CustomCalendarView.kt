@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -23,7 +24,7 @@ class CustomCalendarView(context : Context, attr : AttributeSet) : View(context,
 
     private var onCalendarTouchListener : OnCalendarTouchListener? = null
     private var lineInterval = 0f
-    private val calendar = Calendar.getInstance()
+    private var calendar = Calendar.getInstance()
     private val shiftDate : Int
     private val paint = Paint()
     private val weekChar = arrayOf("S", "M", "T", "W", "T", "F", "S")
@@ -49,6 +50,7 @@ class CustomCalendarView(context : Context, attr : AttributeSet) : View(context,
     }
 
     override fun onDraw(canvas: Canvas) {
+        @SuppressLint("DrawAllocation")
         fun widthPosition(pos : Int, word : String) : Float {
             val bound = Rect()
             paint.getTextBounds(word, 0, word.length, bound)
@@ -68,12 +70,30 @@ class CustomCalendarView(context : Context, attr : AttributeSet) : View(context,
             canvas.drawText(w, widthPosition(idx, w), 100f, paint)
         }
 
-        val currentDate = calendar.get(Calendar.DAY_OF_MONTH)
         val lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val currentCalendar = Calendar.getInstance()
+        if(currentCalendar < calendar) paint.color = ContextCompat.getColor(context, R.color.grey)
         for(day in 1..lastDayOfMonth) {
+            calendar.set(Calendar.DAY_OF_MONTH, day)
             canvas.drawText(day.toString(), widthPosition((day % 7 - 1 + shiftDate) % 7, day.toString()), heightPosition((day - 1 + shiftDate) / 7), paint)
-            if(day == currentDate) paint.color = ContextCompat.getColor(context, R.color.grey)
+            if(areDatesEqual(calendar, currentCalendar)) paint.color = ContextCompat.getColor(context, R.color.grey)
         }
+    }
+
+    private fun areDatesEqual(calendar1: Calendar, calendar2: Calendar): Boolean {
+        val fieldsToCompare = intArrayOf(
+            Calendar.YEAR,
+            Calendar.MONTH,
+            Calendar.DAY_OF_MONTH
+        )
+
+        for (field in fieldsToCompare) {
+            if (calendar1.get(field) != calendar2.get(field)) {
+                return false
+            }
+        }
+
+        return true
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -94,6 +114,11 @@ class CustomCalendarView(context : Context, attr : AttributeSet) : View(context,
 
     fun setOnCalendarTouchListener(listener : OnCalendarTouchListener) {
         onCalendarTouchListener = listener
+    }
+
+    fun updateCalendar(inputCalendar : Calendar) {
+        calendar = inputCalendar
+        invalidate()
     }
 
 }
