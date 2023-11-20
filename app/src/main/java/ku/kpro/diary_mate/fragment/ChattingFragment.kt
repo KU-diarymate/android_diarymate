@@ -14,8 +14,8 @@ class ChattingFragment : Fragment() {
 
     private lateinit var binding: FragmentChattingBinding
     private val messages = mutableListOf(
-        ChatMessage("User1", "Hello!"),
-        ChatMessage("User2", "Hi there!")
+        ChatMessage("User", "Hello!"),
+        ChatMessage("Chatbot", "Hi there!")
     )
 
     private lateinit var chatAdapter: ChatAdapter
@@ -50,7 +50,7 @@ class ChattingFragment : Fragment() {
         // 텍스트가 비어있지 않은 경우에만 처리합니다.
         if (messageText.isNotEmpty()) {
             // 새로운 메시지를 생성합니다.
-            val newMessage = ChatMessage("User1", messageText)
+            val newMessage = ChatMessage("User", messageText)
             // 메시지를 목록에 추가하고 어댑터에 알립니다.
             messages.add(newMessage)
             chatAdapter.notifyItemInserted(messages.size - 1)
