@@ -21,13 +21,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AI 알림"
+        android:fontFamily="@font/pretendard_regular"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="110dp"
         android:layout_marginLeft="30dp"
-        android:textSize="15dp" />
+        android:textSize="17dp" />
     
     <ku.kpro.diary_mate.custom_view.CustomToggleButton
+        android:id="@+id/setting_alarm_btn"
         android:layout_width="40dp"
         android:layout_height="20dp"
         app:layout_constraintTop_toTopOf="@+id/setting_alarm_tv"
@@ -40,13 +42,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="채팅 기반 일기 자동 생성"
+        android:fontFamily="@font/pretendard_regular"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="170dp"
         android:layout_marginLeft="30dp"
-        android:textSize="15dp" />
+        android:textSize="17dp" />
 
     <ku.kpro.diary_mate.custom_view.CustomToggleButton
+        android:id="@+id/setting_auto_diary_btn"
         android:layout_width="40dp"
         android:layout_height="20dp"
         app:layout_constraintTop_toTopOf="@+id/setting_auto_diary_tv"
@@ -59,13 +63,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="미래의 나에게 편지"
+        android:fontFamily="@font/pretendard_regular"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="210dp"
+        android:layout_marginTop="230dp"
         android:layout_marginLeft="30dp"
-        android:textSize="15dp" />
+        android:textSize="17dp" />
 
     <ku.kpro.diary_mate.custom_view.CustomToggleButton
+        android:id="@+id/setting_future_btn"
         android:layout_width="40dp"
         android:layout_height="20dp"
         app:layout_constraintTop_toTopOf="@+id/setting_future_tv"
@@ -78,13 +84,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="과거의 나의 일기 추천"
+        android:fontFamily="@font/pretendard_regular"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="290dp"
         android:layout_marginLeft="30dp"
-        android:textSize="15dp" />
+        android:textSize="17dp" />
 
     <ku.kpro.diary_mate.custom_view.CustomToggleButton
+        android:id="@+id/setting_past_btn"
         android:layout_width="40dp"
         android:layout_height="20dp"
         app:layout_constraintTop_toTopOf="@+id/setting_past_tv"
@@ -97,45 +105,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="키워드 분석 기간"
+        android:fontFamily="@font/pretendard_regular"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="310dp"
+        android:layout_marginTop="350dp"
         android:layout_marginLeft="30dp"
-        android:textSize="15dp" />
+        android:textSize="17dp" />
 
     <TextView
         android:id="@+id/setting_analysis_period_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1주"
-        app:layout_constraintTop_toTopOf="@+id/setting_analysis_tv"
-        app:layout_constraintBottom_toBottomOf="@+id/setting_analysis_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="50dp" />
-
-
-    <ImageView
-        android:id="@+id/setting_dropdown_iv"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:textSize="17dp"
         app:layout_constraintTop_toTopOf="@+id/setting_analysis_tv"
         app:layout_constraintBottom_toBottomOf="@+id/setting_analysis_tv"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/triangle"
-        android:backgroundTint="@color/green_theme" />
+        android:drawableRight="@drawable/triangle"
+        android:drawableTint="@color/green_theme"
+        android:drawablePadding="8dp" />
+
+
+<!--    <ImageView-->
+<!--        android:id="@+id/setting_dropdown_iv"-->
+<!--        android:layout_width="15dp"-->
+<!--        android:layout_height="15dp"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/setting_analysis_tv"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/setting_analysis_tv"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginRight="30dp"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:background="@drawable/triangle"-->
+<!--        android:backgroundTint="@color/green_theme" />-->
 
     <TextView
         android:id="@+id/setting_theme_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="테마"
+        android:fontFamily="@font/pretendard_regular"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="410dp"
         android:layout_marginLeft="30dp"
-        android:textSize="15dp" />
+        android:textSize="17dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/setting_theme_colors"
@@ -148,11 +163,11 @@
 
         <ImageView
             android:id="@+id/setting_theme_red_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="150dp"
+            android:layout_marginRight="200dp"
             android:background="@drawable/circle"
             android:backgroundTint="@color/red_theme"
             android:src="@color/transparent"
@@ -160,11 +175,11 @@
 
         <ImageView
             android:id="@+id/setting_theme_yellow_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="120dp"
+            android:layout_marginRight="160dp"
             android:background="@drawable/circle"
             android:backgroundTint="@color/yellow_theme"
             android:src="@color/transparent"
@@ -172,11 +187,11 @@
 
         <ImageView
             android:id="@+id/setting_theme_green_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="90dp"
+            android:layout_marginRight="120dp"
             android:background="@drawable/circle"
             android:backgroundTint="@color/green_theme"
             android:src="@color/transparent"
@@ -184,11 +199,11 @@
 
         <ImageView
             android:id="@+id/setting_theme_blue_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="60dp"
+            android:layout_marginRight="80dp"
             android:background="@drawable/circle"
             android:backgroundTint="@color/blue_theme"
             android:src="@color/transparent"
@@ -196,11 +211,11 @@
 
         <ImageView
             android:id="@+id/setting_theme_purple_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="40dp"
             android:background="@drawable/circle"
             android:backgroundTint="@color/purple_theme"
             android:src="@color/transparent"
@@ -208,8 +223,8 @@
 
         <ImageView
             android:id="@+id/setting_theme_pink_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/circle"
