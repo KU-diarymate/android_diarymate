@@ -73,11 +73,13 @@ class CustomCalendarView(context : Context, attr : AttributeSet) : View(context,
         val lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
         val currentCalendar = Calendar.getInstance()
         if(currentCalendar < calendar) paint.color = ContextCompat.getColor(context, R.color.grey)
+        val originDate = calendar.get(Calendar.DAY_OF_MONTH)
         for(day in 1..lastDayOfMonth) {
             calendar.set(Calendar.DAY_OF_MONTH, day)
             canvas.drawText(day.toString(), widthPosition((day % 7 - 1 + shiftDate) % 7, day.toString()), heightPosition((day - 1 + shiftDate) / 7), paint)
             if(areDatesEqual(calendar, currentCalendar)) paint.color = ContextCompat.getColor(context, R.color.grey)
         }
+        calendar.set(Calendar.DAY_OF_MONTH, originDate)
     }
 
     private fun areDatesEqual(calendar1: Calendar, calendar2: Calendar): Boolean {

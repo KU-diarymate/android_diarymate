@@ -9,4 +9,6 @@ open class Diary() : RealmObject() {
     var date : String = ""
     var context : String = ""
     var hashtags = RealmList<String>()
+    var emotionalHashtags = RealmList<String>()
+    var dailyHashtags = RealmList<String>()
 }
