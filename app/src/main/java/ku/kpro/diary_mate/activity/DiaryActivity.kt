@@ -1,7 +1,6 @@
 package ku.kpro.diary_mate.activity
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -144,6 +143,7 @@ class DiaryActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        sortHashtags()
         saveDiary()
     }
 
@@ -164,6 +164,11 @@ class DiaryActivity : AppCompatActivity() {
         realm.copyToRealmOrUpdate(diary)
         realm.commitTransaction()
         realm.close()
+    }
+
+    private fun sortHashtags() {
+        // 해시태그 분류 하는 로직
+        diary.emotionalHashtags.addAll(diary.hashtags)
     }
 
 }
