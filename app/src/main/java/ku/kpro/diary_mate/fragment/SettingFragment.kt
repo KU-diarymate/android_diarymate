@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import ku.kpro.diary_mate.R
 import ku.kpro.diary_mate.databinding.FragmentSettingBinding
+import ku.kpro.diary_mate.databinding.PopupMenuPeroidBinding
 
 class SettingFragment : Fragment() {
 
@@ -44,7 +46,42 @@ class SettingFragment : Fragment() {
             }
         }
 
+        binding.settingAnalysisPeriodTv.setOnClickListener {
+            handlePopup()
+        }
+
+
+
+
+
+
+
+
         return binding.root
+    }
+
+    private fun handlePopup() {
+        val popupBinding = PopupMenuPeroidBinding.inflate(LayoutInflater.from(context))
+        val popupWindow = PopupWindow(
+            popupBinding.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
+        popupBinding.periodPopup1weekBtn.setOnClickListener {
+            popupWindow.dismiss()
+        }
+        popupBinding.periodPopup2weekBtn.setOnClickListener {
+            popupWindow.dismiss()
+        }
+        popupBinding.periodPopup3weekBtn.setOnClickListener {
+            popupWindow.dismiss()
+        }
+        popupBinding.periodPopup4weekBtn.setOnClickListener {
+            popupWindow.dismiss()
+        }
+        popupWindow.elevation = 50f
+        popupWindow.showAsDropDown(binding.settingAnalysisPeriodTv)
     }
 
     private fun clearAllThemeColors() {
@@ -54,15 +91,11 @@ class SettingFragment : Fragment() {
     }
 
     private fun selectThemeColor(imageView: View) {
-//        imageView.setBackgroundResource(R.drawable.circle) // Set background to circle drawable
-//        imageView.backgroundTintList = ColorStateList.valueOf(
-//            ContextCompat.getColor(requireContext(), R.color.selected_color)
-//        )
-        // Set other attributes as needed
-        // ...
 
         // Set the check mark
         (imageView as ImageView).setImageResource(R.drawable.check)
     }
+
+
 
 }
