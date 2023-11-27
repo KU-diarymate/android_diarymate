@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:name=".etc.DiaryMateApplication"
         android:allowBackup="true"
@@ -13,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DiaryMate"
         tools:targetApi="31">
+        <service
+            android:name=".etc.ChatbotService"
+            android:exported="false"/>
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">

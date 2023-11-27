@@ -1,5 +1,6 @@
 package ku.kpro.diary_mate.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import ku.kpro.diary_mate.fragment.DiaryFragment
 import ku.kpro.diary_mate.R
 import ku.kpro.diary_mate.fragment.SettingFragment
 import ku.kpro.diary_mate.databinding.ActivityMainBinding
+import ku.kpro.diary_mate.etc.ChatbotService
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         binding.mainPager.adapter = ViewPagerAdapter(supportFragmentManager,lifecycle)
         binding.mainPager.registerOnPageChangeCallback(PageChangeCallback())
         binding.mainBottomNav.setOnItemSelectedListener { navigationSelected(it) }
+
+        val serviceIntent = Intent(this, ChatbotService::class.java)
+        startService(serviceIntent)
     }
 
     private fun navigationSelected(item: MenuItem): Boolean {
