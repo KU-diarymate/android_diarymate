@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import ku.kpro.diary_mate.R
 import ku.kpro.diary_mate.activity.MainActivity
+import ku.kpro.diary_mate.fragment.ChattingFragment
 
 class Chatbot(private val context: Context) {
 
@@ -46,9 +47,9 @@ class Chatbot(private val context: Context) {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)  // Auto-cancel the notification when tapped
 
-        // 알림을 터치했을 때 실행될 액티비티 지정
-        // TODO: ChattingFragment로 이동하도록 수정
+        // 알림을 터치했을 때 ChattingFragment로 이동
         val resultIntent = Intent(context, MainActivity::class.java)
+        resultIntent.putExtra("fragment_to_load", ChattingFragment::class.java.name)
         val resultPendingIntent = PendingIntent.getActivity(
             context,
             0,

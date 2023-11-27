@@ -33,6 +33,12 @@ class MainActivity : AppCompatActivity() {
 
         val serviceIntent = Intent(this, ChatbotService::class.java)
         startService(serviceIntent)
+
+        // fragment_to_load extra 확인
+        val fragmentToLoad = intent.getStringExtra("fragment_to_load")
+        if (fragmentToLoad == ChattingFragment::class.java.name) {
+            this.PageChangeCallback().onPageSelected(1)
+        }
     }
 
     private fun navigationSelected(item: MenuItem): Boolean {
