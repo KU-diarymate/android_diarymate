@@ -24,7 +24,7 @@ class ChatbotService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        chatbot = Chatbot(this)
+        chatbot = Chatbot()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -64,11 +64,11 @@ class ChatbotService : Service() {
 
 
         val notificationManager =
-            baseContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
 
         // Notification 생성
-        val notificationBuilder = NotificationCompat.Builder(baseContext, "chatbot_channel")
+        val notificationBuilder = NotificationCompat.Builder(this, "chatbot_channel")
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle("Random Question")
             .setContentText(randomQuestion)
@@ -76,10 +76,10 @@ class ChatbotService : Service() {
             .setAutoCancel(true)  // Auto-cancel the notification when tapped
 
         // 알림을 터치했을 때 ChattingFragment로 이동
-        val resultIntent = Intent(baseContext, MainActivity::class.java)
+        val resultIntent = Intent(this, MainActivity::class.java)
         resultIntent.putExtra("fragment_to_load", ChattingFragment::class.java.name)
         val resultPendingIntent = PendingIntent.getActivity(
-            baseContext,
+            this,
             0,
             resultIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
@@ -87,9 +87,9 @@ class ChatbotService : Service() {
         notificationBuilder.setContentIntent(resultPendingIntent)
 
         // 알림을 표시
-        with(NotificationManagerCompat.from(baseContext)) {
+        with(NotificationManagerCompat.from(this)) {
             if (ActivityCompat.checkSelfPermission(
-                    baseContext,
+                    this@ChatbotService,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {

@@ -14,7 +14,7 @@ import ku.kpro.diary_mate.R
 import ku.kpro.diary_mate.activity.MainActivity
 import ku.kpro.diary_mate.fragment.ChattingFragment
 
-class Chatbot(private val context: Context) {
+class Chatbot() {
 
     private val questions = listOf(
         "오늘 어떤 일이 있었나요?",
