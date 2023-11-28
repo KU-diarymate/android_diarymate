@@ -23,51 +23,8 @@ class Chatbot(private val context: Context) {
         // TODO: ChatGPT로 생성한 질문 리스트로 대체
     )
 
-    fun sendRandomQuestion() {
-        val randomQuestion = questions.random()
-
-        // Notification Channel 생성 (Android Oreo 이상에서 필요)
-        val channelId = "chatbot_channel"
-        val channelName = "Chatbot Channel"
-        val channelDescription = "Channel for Chatbot Notifications"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(channelId, channelName, importance).apply {
-            description = channelDescription
-        }
-
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-
-        // Notification 생성
-        val notificationBuilder = NotificationCompat.Builder(context, "chatbot_channel")
-            .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Random Question")
-            .setContentText(randomQuestion)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(true)  // Auto-cancel the notification when tapped
-
-        // 알림을 터치했을 때 ChattingFragment로 이동
-        val resultIntent = Intent(context, MainActivity::class.java)
-        resultIntent.putExtra("fragment_to_load", ChattingFragment::class.java.name)
-        val resultPendingIntent = PendingIntent.getActivity(
-            context,
-            0,
-            resultIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        notificationBuilder.setContentIntent(resultPendingIntent)
-
-        // 알림을 표시
-        with(NotificationManagerCompat.from(context)) {
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: 권한이 부여되지 않았을 때, 권한을 요청하고 사용자가 권한을 부여할 경우에 대한 처리
-            }
-            notify(1, notificationBuilder.build()) // Use a unique notification ID
-        }
+    fun getQuestions() : String {
+        return questions.random()
     }
+
 }
