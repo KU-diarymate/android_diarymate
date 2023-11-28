@@ -14,6 +14,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import ku.kpro.diary_mate.R
+import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 
 class CustomToggleButton(context : Context, attr : AttributeSet)
     : View(context, attr) {
@@ -26,8 +27,9 @@ class CustomToggleButton(context : Context, attr : AttributeSet)
     private val buttonMargin = 5f // 원 버튼과 둥근 직사각형의 간격
 
     init {
-        backgroundPaint.color = ContextCompat.getColor(context, R.color.green_theme)
+//        backgroundPaint.color = ContextCompat.getColor(context, R.color.green_theme)
         buttonPaint.color = Color.WHITE
+        backgroundPaint.color = Color.parseColor(setting.themeColor)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -75,7 +77,7 @@ class CustomToggleButton(context : Context, attr : AttributeSet)
             backgroundPaint.color = Color.LTGRAY
         }
         else{
-            backgroundPaint.color = ContextCompat.getColor(context, R.color.green_theme)
+            backgroundPaint.color = Color.parseColor(setting.themeColor)
         }
     }
 
@@ -110,4 +112,15 @@ class CustomToggleButton(context : Context, attr : AttributeSet)
         }
         invalidate() // 뷰를 다시 그리도록 갱신
     }
+
+    // 테마 색상 업데이트
+    fun updateThemeColor(themeColor: String) {
+        backgroundPaint.color = Color.parseColor(themeColor)
+        invalidate()
+    }
+
+    fun isLeftSelected(): Boolean {
+        return isLeftSelected
+    }
+
 }

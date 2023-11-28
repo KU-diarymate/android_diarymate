@@ -17,12 +17,12 @@ class DiaryMateApplication : Application() {
         super.onCreate()
 
         pref = PreferenceUtil(this)
-        setting.setSettingData(pref.getString("setting", ""))
+        setting.loadSettingData(pref)
 
         Realm.init(this)
         val config : RealmConfiguration = RealmConfiguration.Builder()
             .allowWritesOnUiThread(true)
-            .name("scrapIT.realm")
+            .name("DiaryMate.realm")
             .deleteRealmIfMigrationNeeded()
             .build()
         Realm.setDefaultConfiguration(config)
