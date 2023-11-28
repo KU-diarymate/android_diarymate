@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="@+id/setting_alarm_tv"
         app:layout_constraintBottom_toBottomOf="@+id/setting_alarm_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="30dp"/>
+        android:layout_marginRight="30dp" />
     
     <TextView
         android:id="@+id/setting_auto_diary_tv"
@@ -59,10 +59,10 @@
         android:layout_marginRight="30dp"/>
     
     <TextView
-        android:id="@+id/setting_future_tv"
+        android:id="@+id/setting_keyword_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="미래의 나에게 편지"
+        android:text="키워드 추출"
         android:fontFamily="@font/pretendard_regular"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,11 +71,11 @@
         android:textSize="17dp" />
 
     <ku.kpro.diary_mate.custom_view.CustomToggleButton
-        android:id="@+id/setting_future_btn"
+        android:id="@+id/setting_keyword_btn"
         android:layout_width="40dp"
         android:layout_height="20dp"
-        app:layout_constraintTop_toTopOf="@+id/setting_future_tv"
-        app:layout_constraintBottom_toBottomOf="@+id/setting_future_tv"
+        app:layout_constraintTop_toTopOf="@+id/setting_keyword_tv"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_keyword_tv"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginRight="30dp"/>
     
