@@ -14,6 +14,8 @@ import ku.kpro.diary_mate.fragment.DiaryFragment
 import ku.kpro.diary_mate.R
 import ku.kpro.diary_mate.fragment.SettingFragment
 import ku.kpro.diary_mate.databinding.ActivityMainBinding
+import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.pref
+import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 
 class MainActivity : AppCompatActivity() {
 
@@ -79,6 +81,11 @@ class MainActivity : AppCompatActivity() {
                 else -> error("no such position: $position")
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        setting.saveSettingData(pref)
     }
 
 }
