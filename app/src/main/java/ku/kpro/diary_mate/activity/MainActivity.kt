@@ -1,5 +1,6 @@
 package ku.kpro.diary_mate.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import ku.kpro.diary_mate.fragment.DiaryFragment
 import ku.kpro.diary_mate.R
 import ku.kpro.diary_mate.fragment.SettingFragment
 import ku.kpro.diary_mate.databinding.ActivityMainBinding
+import ku.kpro.diary_mate.etc.ChatbotService
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.pref
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 
@@ -30,6 +32,15 @@ class MainActivity : AppCompatActivity() {
         binding.mainPager.adapter = ViewPagerAdapter(supportFragmentManager,lifecycle)
         binding.mainPager.registerOnPageChangeCallback(PageChangeCallback())
         binding.mainBottomNav.setOnItemSelectedListener { navigationSelected(it) }
+
+        val serviceIntent = Intent(this, ChatbotService::class.java)
+        startService(serviceIntent)
+
+        // fragment_to_load extra 확인
+        val fragmentToLoad = intent.getStringExtra("fragment_to_load")
+        if (fragmentToLoad == ChattingFragment::class.java.name) {
+            this.PageChangeCallback().onPageSelected(1)
+        }
     }
 
     private fun navigationSelected(item: MenuItem): Boolean {
@@ -82,6 +93,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+}
 
     override fun onDestroy() {
         super.onDestroy()
