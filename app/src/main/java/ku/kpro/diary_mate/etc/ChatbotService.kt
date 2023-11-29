@@ -82,7 +82,7 @@ class ChatbotService : Service() {
             this,
             0,
             resultIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         notificationBuilder.setContentIntent(resultPendingIntent)
 

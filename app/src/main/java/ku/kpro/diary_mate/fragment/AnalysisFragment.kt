@@ -35,6 +35,7 @@ class AnalysisFragment : Fragment() {
                 binding.analysisTitleTv.text = "감정키워드"
                 keyword = Keyword.EMOTION
             }
+            updateAnalysisView(keyword)
         }
         binding.analysisDownChevronIv.setOnClickListener {
             if(keyword == Keyword.EMOTION) {
@@ -44,10 +45,46 @@ class AnalysisFragment : Fragment() {
                 binding.analysisTitleTv.text = "감정키워드"
                 keyword = Keyword.EMOTION
             }
-            getMainKeyword(30, Keyword.EMOTION)
+            updateAnalysisView(keyword)
         }
+        updateAnalysisView(keyword)
 
         return binding.root
+    }
+
+    fun updateAnalysisView(keyword : Keyword) {
+        setMainKeyword(getMainKeyword(30, keyword))
+    }
+
+    private fun setMainKeyword(list : List<String>) {
+        if(list.isNotEmpty())
+            binding.analysisKeyword1Tv.text = list[0]
+        else
+            binding.analysisKeyword1Tv.text = ""
+        if(list.size > 1)
+            binding.analysisKeyword5Tv.text = list[1]
+        else
+            binding.analysisKeyword5Tv.text = ""
+        if(list.size > 2)
+            binding.analysisKeyword4Tv.text = list[2]
+        else
+            binding.analysisKeyword4Tv.text = ""
+        if(list.size > 3)
+            binding.analysisKeyword7Tv.text = list[3]
+        else
+            binding.analysisKeyword7Tv.text = ""
+        if(list.size > 4)
+            binding.analysisKeyword6Tv.text = list[4]
+        else
+            binding.analysisKeyword6Tv.text = ""
+        if(list.size > 5)
+            binding.analysisKeyword2Tv.text = list[5]
+        else
+            binding.analysisKeyword2Tv.text = ""
+        if(list.size > 6)
+            binding.analysisKeyword3Tv.text = list[6]
+        else
+            binding.analysisKeyword3Tv.text = ""
     }
 
     private fun getMainKeyword(period : Int, keyword : Keyword) : List<String> {
@@ -63,10 +100,17 @@ class AnalysisFragment : Fragment() {
                 0
             }
         }
-        val allHashtags = diaryList.flatMap { it.hashtags }
-        val hashtagCountMap = allHashtags.groupingBy { it }.eachCount()
-        val topHashtags = hashtagCountMap.entries.sortedByDescending { it.value }.take(7)
-        return topHashtags.map { it.key }
+        return if(keyword == Keyword.DAILY) {
+            val allHashtags = diaryList.flatMap { it.dailyHashtags }
+            val hashtagCountMap = allHashtags.groupingBy { it }.eachCount()
+            val topHashtags = hashtagCountMap.entries.sortedByDescending { it.value }.take(7)
+            topHashtags.map { it.key }
+        } else if(keyword == Keyword.EMOTION) {
+            val allHashtags = diaryList.flatMap { it.emotionalHashtags }
+            val hashtagCountMap = allHashtags.groupingBy { it }.eachCount()
+            val topHashtags = hashtagCountMap.entries.sortedByDescending { it.value }.take(7)
+            topHashtags.map { it.key }
+        } else ArrayList()
     }
 
 }
