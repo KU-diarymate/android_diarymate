@@ -11,8 +11,10 @@ import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import ku.kpro.diary_mate.R
+import ku.kpro.diary_mate.custom_view.CustomToggleButton
 import ku.kpro.diary_mate.databinding.FragmentSettingBinding
 import ku.kpro.diary_mate.databinding.PopupMenuPeroidBinding
+import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.pref
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 
 class SettingFragment : Fragment() {
@@ -37,8 +39,33 @@ class SettingFragment : Fragment() {
     ): View? {
         binding = FragmentSettingBinding.inflate(inflater, container, false)
 
-        // Set initial state (e.g., the first theme color as selected)
-        selectThemeColor(binding.settingThemeGreenIv)
+        // SharedPreferences에서 설정 불러오기
+        setting.loadSettingData(pref)
+
+//        토글위치 설정
+        binding.settingAlarmBtn.setToggleOn(setting.useAINotification)
+        binding.settingAutoDiaryBtn.setToggleOn(setting.useAutoDiaryCreation)
+        binding.settingKeywordBtn.setToggleOn(setting.useKeywordExtract)
+        binding.settingPastBtn.setToggleOn(setting.usePastDiaryFunc)
+        setToggleSetting()
+
+
+//        테마색상 불러오기 관련 설정
+        // 테마색상 체크 표시 설정
+        var checkedView = when (setting.themeColor) {
+            "#FF8A7D" -> binding.settingThemeRedIv
+            "#FFD776" -> binding.settingThemeYellowIv
+            "#8ADC8C" -> binding.settingThemeGreenIv
+            "#88C8FF" -> binding.settingThemeBlueIv
+            "#C1A5FF" -> binding.settingThemePurpleIv
+            "#FFAAD7" -> binding.settingThemePinkIv
+            else -> {binding.settingThemeGreenIv}
+        }
+        selectThemeColor(checkedView)
+        // 팝업메뉴 색상 불러오기
+        binding.settingAnalysisPeriodTv.compoundDrawableTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
+
+
 
         // 테마색상 변경 클릭 리스너
         themeColorImageViews.forEach { imageView ->
@@ -65,6 +92,9 @@ class SettingFragment : Fragment() {
 
                 // triangle.xml 테마 색상 업데이트
                 binding.settingAnalysisPeriodTv.compoundDrawableTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
+
+                // SharedPreferences에 테마색상 설정 저장
+                setting.saveSettingData(pref)
             }
         }
 
@@ -74,15 +104,14 @@ class SettingFragment : Fragment() {
 //        if(setting.useKeywordExtract) binding.settingKeywordBtn.toggle()
 //        if(setting.usePastDiaryFunc) binding.settingPastBtn.toggle()
 
-        setting.useAINotification = binding.settingAlarmBtn.isLeftSelected()
-        setting.useAutoDiaryCreation = binding.settingAutoDiaryBtn.isLeftSelected()
-        setting.useKeywordExtract = binding.settingKeywordBtn.isLeftSelected()
-        setting.usePastDiaryFunc = binding.settingPastBtn.isLeftSelected()
+//        setting.useAINotification = binding.settingAlarmBtn.isLeftSelected()
+//        setting.useAutoDiaryCreation = binding.settingAutoDiaryBtn.isLeftSelected()
+//        setting.useKeywordExtract = binding.settingKeywordBtn.isLeftSelected()
+//        setting.usePastDiaryFunc = binding.settingPastBtn.isLeftSelected()
 
         binding.settingAnalysisPeriodTv.setOnClickListener {
             handlePopup()
         }
-
 
 
 
@@ -119,6 +148,9 @@ class SettingFragment : Fragment() {
             binding.settingAnalysisPeriodTv.text = "4주"
             popupWindow.dismiss()
         }
+        // SharedPreferences에 분석기간 설정 저장
+        setting.saveSettingData(pref)
+
         popupWindow.elevation = 50f
         popupWindow.showAsDropDown(binding.settingAnalysisPeriodTv)
     }
@@ -135,6 +167,35 @@ class SettingFragment : Fragment() {
         (imageView as ImageView).setImageResource(R.drawable.check)
     }
 
+    private fun setToggleSetting() {
+        binding.settingAlarmBtn.setOnToggleChangedListener(object : CustomToggleButton.OnToggleChangedListener {
+            override fun toggleChanged(isOn: Boolean) {
+                setting.useAINotification = isOn
+                setting.saveSettingData(pref)
+            }
+        })
 
+        binding.settingAutoDiaryBtn.setOnToggleChangedListener(object : CustomToggleButton.OnToggleChangedListener {
+            override fun toggleChanged(isOn: Boolean) {
+                setting.useAutoDiaryCreation = isOn
+                setting.saveSettingData(pref)
+            }
+        })
+
+        binding.settingKeywordBtn.setOnToggleChangedListener(object : CustomToggleButton.OnToggleChangedListener {
+            override fun toggleChanged(isOn: Boolean) {
+                setting.useKeywordExtract = isOn
+                setting.saveSettingData(pref)
+            }
+        })
+
+        binding.settingPastBtn.setOnToggleChangedListener(object : CustomToggleButton.OnToggleChangedListener {
+            override fun toggleChanged(isOn: Boolean) {
+                setting.usePastDiaryFunc = isOn
+                setting.saveSettingData(pref)
+            }
+        })
+
+    }
 
 }

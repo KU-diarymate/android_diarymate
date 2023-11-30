@@ -26,8 +26,17 @@ class CustomToggleButton(context : Context, attr : AttributeSet)
     private val buttonRadius = 23f // 원 버튼의 반지름
     private val buttonMargin = 5f // 원 버튼과 둥근 직사각형의 간격
 
+    interface OnToggleChangedListener {
+        fun toggleChanged(isOn : Boolean)
+    }
+
+    private var toggleChangedListener : OnToggleChangedListener? = null
+
+    fun setOnToggleChangedListener(listener : OnToggleChangedListener) {
+        toggleChangedListener = listener
+    }
+
     init {
-//        backgroundPaint.color = ContextCompat.getColor(context, R.color.green_theme)
         buttonPaint.color = Color.WHITE
         backgroundPaint.color = Color.parseColor(setting.themeColor)
     }
@@ -59,6 +68,7 @@ class CustomToggleButton(context : Context, attr : AttributeSet)
             MotionEvent.ACTION_DOWN -> {
                 // 터치 이벤트가 발생하면 토글 실행
                 toggle()
+                toggleChangedListener?.toggleChanged(isLeftSelected)
                 return true
             }
         }
@@ -121,6 +131,11 @@ class CustomToggleButton(context : Context, attr : AttributeSet)
 
     fun isLeftSelected(): Boolean {
         return isLeftSelected
+    }
+
+    fun setToggleOn(isOn : Boolean) {
+        isLeftSelected = !isOn
+        toggle()
     }
 
 }
