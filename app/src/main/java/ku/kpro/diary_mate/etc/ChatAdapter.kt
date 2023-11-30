@@ -14,16 +14,18 @@ import ku.kpro.diary_mate.databinding.ItemChattingUserBinding
 
 class ChatAdapter(private val messages: List<ChatMessage>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    // 뷰 타입 상수 정의
-    private val VIEW_TYPE_USER_MESSAGE = 1
-    private val VIEW_TYPE_CHATBOT_MESSAGE = 2
+    companion object {
+        // 뷰 타입 상수 정의
+        private const val VIEW_TYPE_USER_MESSAGE = 1
+        private const val VIEW_TYPE_CHATBOT_MESSAGE = 2
+    }
 
     // ViewHolder 클래스 정의
-    class UserMessageViewHolder(private val binding: ItemChattingUserBinding) : RecyclerView.ViewHolder(binding.root) {
+    class UserMessageViewHolder(binding: ItemChattingUserBinding) : RecyclerView.ViewHolder(binding.root) {
         val messageTextView = binding.chattingUserTv
     }
 
-    class ChatbotMessageViewHolder(private val binding: ItemChattingChatbotBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ChatbotMessageViewHolder(binding: ItemChattingChatbotBinding) : RecyclerView.ViewHolder(binding.root) {
         val messageTextView = binding.chattingChatbotTv
     }
 

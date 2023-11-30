@@ -11,6 +11,13 @@ class DiaryMateApplication : Application() {
     companion object {
         val setting = DiaryMateSetting.getDefaultSetting()
         lateinit var pref : PreferenceUtil
+
+        private var msgId = 0
+        fun addNewMessage(pref : PreferenceUtil) : Int {
+            msgId += 1
+            pref.setInt("msgID", msgId)
+            return msgId
+        }
     }
 
     override fun onCreate() {
@@ -18,6 +25,7 @@ class DiaryMateApplication : Application() {
 
         pref = PreferenceUtil(this)
         setting.loadSettingData(pref)
+        msgId = pref.getInt("msgID", 0)
 
         Realm.init(this)
         val config : RealmConfiguration = RealmConfiguration.Builder()
