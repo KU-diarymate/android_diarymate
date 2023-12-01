@@ -16,6 +16,15 @@
         android:scrollbars="none"
         tools:listitem="@layout/item_chatting_chatbot"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/chatbot"
+        android:backgroundTint="@color/green_theme"
+        android:tintMode="@color/white"/>
+
     <!-- 메시지 입력창과 전송 버튼을 담은 레이아웃 -->
     <LinearLayout
         android:layout_width="match_parent"

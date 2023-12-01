@@ -5,8 +5,11 @@ import com.renju_note.isoo.util.PreferenceUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import ku.kpro.diary_mate.data.DiaryMateSetting
+import ku.kpro.diary_mate.fragment.ChattingFragment
 
 class DiaryMateApplication : Application() {
+
+    var currentChattingFragment: ChattingFragment? = null
 
     companion object {
         val setting = DiaryMateSetting.getDefaultSetting()

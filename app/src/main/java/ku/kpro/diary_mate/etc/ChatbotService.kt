@@ -1,55 +1,42 @@
 package ku.kpro.diary_mate.etc
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.IntentService
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.IBinder
-import android.os.SystemClock
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import ku.kpro.diary_mate.R
 import ku.kpro.diary_mate.activity.MainActivity
 import ku.kpro.diary_mate.fragment.ChattingFragment
-import java.util.Timer
 import java.util.concurrent.TimeUnit
-import kotlin.concurrent.timerTask
 
-class ChatbotService : IntentService("ChatbotService")  {
+class ChatbotService: Service() {
 
     private lateinit var chatbot: Chatbot
 
-    companion object {
-        private val ALARM_INTERVAL = TimeUnit.MINUTES.toMillis(0.25.toLong())
-        private const val CHANNEL_ID = "chatbot_channel"
-    }
 
-    override fun onHandleIntent(intent: Intent?) {
-        chatbot = Chatbot()
-        sendRandomQuestion()
+    companion object {
+        //private const val CHANNEL_ID = "chatbot_channel"
     }
 
     override fun onCreate() {
         super.onCreate()
         chatbot = Chatbot()
-        startBackgroundTask()
-    }
-
-    private fun startBackgroundTask() {
-        val timer = Timer()
-        timer.schedule(timerTask {sendRandomQuestion()}, 0, 15000)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        createNotificationChannel()
+        //createNotificationChannel()
+        sendRandomQuestion()
         return START_STICKY
     }
 
@@ -59,26 +46,37 @@ class ChatbotService : IntentService("ChatbotService")  {
 
     private fun sendRandomQuestion() {
         val randomQuestion = chatbot.getQuestions()
+        Log.e("randomQuestion", randomQuestion)
 
-        // Generate a unique notification ID based on current timestamp
-        val notificationId = System.currentTimeMillis().toInt()
+        // ChattingFragment가 현재 활성화되어 있는지 확인
+        val chattingFragment = (applicationContext as? DiaryMateApplication)?.currentChattingFragment
+        Log.e("ChatbotService", "randomQuestion.isNotBlank(): " + randomQuestion.isNotBlank().toString())
+        Log.e("ChatbotService", "chattingFragment != null: " + (chattingFragment != null).toString())
+        if (randomQuestion.isNotBlank() && chattingFragment != null) {
+            // 얻은 질문을 채팅 기록에 추가
+            chattingFragment.addMessage(randomQuestion, "Chatbot")
+            Log.e("ChatbotService", "chattingFragment.addMessage")
+            chattingFragment.chatAdapter.notifyItemInserted(chattingFragment.messages.size - 1)
+            chattingFragment.binding.recyclerView.scrollToPosition(chattingFragment.chatAdapter.itemCount - 1)
 
-        with(NotificationManagerCompat.from(this)) {
-            if (ActivityCompat.checkSelfPermission(
-                    this@ChatbotService,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: Consider calling ActivityCompat#requestPermissions
-                return
-            }
-            if (randomQuestion != "")
+            /*val notificationId = System.currentTimeMillis().toInt()
+
+            with(NotificationManagerCompat.from(this)) {
+                if (ActivityCompat.checkSelfPermission(
+                        this@ChatbotService,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    // TODO: ActivityCompat#requestPermissions를 호출하는 것을 고려
+                    return
+                }
                 notify(notificationId, createNotification(randomQuestion))
+            }*/
         }
     }
 
     //showNotification
-    private fun createNotificationChannel() {
+    /*private fun createNotificationChannel() {
         val channelName = "Chatbot Channel"
         val channelDescription = "Channel for Chatbot Notifications"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -103,31 +101,12 @@ class ChatbotService : IntentService("ChatbotService")  {
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Random Question")
+            .setContentTitle("오늘의 질문")
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .setOngoing(false)
             .setContentIntent(resultPendingIntent)
             .build()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Reschedule the service to run after the specified interval
-        scheduleService()
-    }
-
-    @SuppressLint("ScheduleExactAlarm")
-    private fun scheduleService() {
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, ChatbotService::class.java)
-        val pendingIntent =
-            PendingIntent.getService(this, 0, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-
-        // Schedule the service to run at the specified interval
-        val triggerAtMillis = SystemClock.elapsedRealtime() + ALARM_INTERVAL
-        alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, pendingIntent)
-    }
+    }*/
 }

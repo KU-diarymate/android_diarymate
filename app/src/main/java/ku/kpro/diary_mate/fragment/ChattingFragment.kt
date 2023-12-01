@@ -1,17 +1,20 @@
 package ku.kpro.diary_mate.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.realm.Realm
-import ku.kpro.diary_mate.etc.ChatAdapter
 import ku.kpro.diary_mate.data.ChatMessage
 import ku.kpro.diary_mate.databinding.FragmentChattingBinding
+import ku.kpro.diary_mate.etc.ChatAdapter
+import ku.kpro.diary_mate.etc.DiaryMateApplication
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.addNewMessage
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.pref
 import java.text.SimpleDateFormat
@@ -20,10 +23,21 @@ import java.util.Locale
 
 class ChattingFragment : Fragment() {
 
-    private lateinit var binding: FragmentChattingBinding
-    private lateinit var messages : MutableList<ChatMessage>
+    lateinit var binding: FragmentChattingBinding
+    lateinit var messages : MutableList<ChatMessage>
     private lateinit var realm : Realm
-    private lateinit var chatAdapter: ChatAdapter
+    lateinit var chatAdapter: ChatAdapter
+
+    interface FabClickListener {
+        fun onFabClick()
+    }
+
+    private var fabClickListener: FabClickListener? = null
+
+    // FabClickListener의 setter 메서드
+    fun setFabClickListener(listener: FabClickListener) {
+        fabClickListener = listener
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +64,10 @@ class ChattingFragment : Fragment() {
             sendMessage()
             Handler(Looper.getMainLooper()).postDelayed({ arriveMessage() }, 1000)
         }
+
+        binding.fab.setOnClickListener {
+            fabClickListener?.onFabClick()
+        }
     }
 
     private fun getMessages() {
@@ -73,7 +91,7 @@ class ChattingFragment : Fragment() {
         binding.recyclerView.scrollToPosition(chatAdapter.itemCount - 1)
     }
 
-    private fun addMessage(msg: String, sender: String) {
+    fun addMessage(msg: String, sender: String) {
         val chat = ChatMessage()
         chat.index = addNewMessage(pref)
         chat.sender = sender
@@ -87,5 +105,21 @@ class ChattingFragment : Fragment() {
         realm.copyToRealmOrUpdate(chat)
         realm.commitTransaction()
     }
+
+    /*override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is DiaryMateApplication) {
+            (context as DiaryMateApplication).currentChattingFragment = this
+            Log.e("ChattingFragment", "fragment attached")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        if (context is DiaryMateApplication) {
+            (context as DiaryMateApplication).currentChattingFragment = null
+            Log.e("ChattingFragment", "fragment detached")
+        }
+    }*/
 
 }
