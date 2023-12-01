@@ -1,33 +1,13 @@
 package ku.kpro.diary_mate.etc
 
-import android.Manifest
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.IBinder
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
-import ku.kpro.diary_mate.R
-import ku.kpro.diary_mate.activity.MainActivity
-import ku.kpro.diary_mate.fragment.ChattingFragment
-import java.util.concurrent.TimeUnit
 
 class ChatbotService: Service() {
 
     private lateinit var chatbot: Chatbot
-
-
-    companion object {
-        //private const val CHANNEL_ID = "chatbot_channel"
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -48,7 +28,6 @@ class ChatbotService: Service() {
         val randomQuestion = chatbot.getQuestions()
         Log.e("randomQuestion", randomQuestion)
 
-        // ChattingFragment가 현재 활성화되어 있는지 확인
         val chattingFragment = (applicationContext as? DiaryMateApplication)?.currentChattingFragment
         Log.e("ChatbotService", "randomQuestion.isNotBlank(): " + randomQuestion.isNotBlank().toString())
         Log.e("ChatbotService", "chattingFragment != null: " + (chattingFragment != null).toString())
@@ -67,7 +46,6 @@ class ChatbotService: Service() {
                         Manifest.permission.POST_NOTIFICATIONS
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
-                    // TODO: ActivityCompat#requestPermissions를 호출하는 것을 고려
                     return
                 }
                 notify(notificationId, createNotification(randomQuestion))
@@ -75,7 +53,6 @@ class ChatbotService: Service() {
         }
     }
 
-    //showNotification
     /*private fun createNotificationChannel() {
         val channelName = "Chatbot Channel"
         val channelDescription = "Channel for Chatbot Notifications"

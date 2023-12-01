@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import ku.kpro.diary_mate.custom_view.CustomCalendarView
 import ku.kpro.diary_mate.activity.DiaryActivity
 import ku.kpro.diary_mate.databinding.FragmentDiaryBinding
+import ku.kpro.diary_mate.etc.DiaryNotificationManager
+import ku.kpro.diary_mate.etc.RandomDiaryGenerator
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -51,6 +53,14 @@ class DiaryFragment : Fragment() {
                 }
             }
         })
+        binding.randomDiaryButton.setOnClickListener {
+            val randomDiaryGenerator = RandomDiaryGenerator()
+            val diaryNotificationManager = DiaryNotificationManager(requireContext)
+            val randomDiary = randomDiaryGenerator.getRandomDiary()
+            if (randomDiary != null) {
+                diaryNotificationManager.sendNotification(randomDiary)
+            }
+        }
 
         return binding.root
     }
