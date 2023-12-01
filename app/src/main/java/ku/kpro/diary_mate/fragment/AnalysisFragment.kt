@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import io.realm.Realm
+import ku.kpro.diary_mate.R
 import ku.kpro.diary_mate.data.Diary
+import ku.kpro.diary_mate.data.DiaryMateSetting
 import ku.kpro.diary_mate.databinding.FragmentAnalysisBinding
+import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -26,6 +29,41 @@ class AnalysisFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAnalysisBinding.inflate(inflater, container, false)
+
+        if(setting.themeColor == "#FF8A7D") {
+            binding.analysisBackgroundIv.setImageResource(R.drawable.background_red)
+        } else if(setting.themeColor == "#FFD776") {
+            binding.analysisBackgroundIv.setImageResource(R.drawable.background_yellow)
+        } else if(setting.themeColor == "#8ADC8C") {
+            binding.analysisBackgroundIv.setImageResource(R.drawable.background_green)
+        } else if(setting.themeColor == "#88C8FF") {
+            binding.analysisBackgroundIv.setImageResource(R.drawable.background_blue)
+        } else if(setting.themeColor == "#C1A5FF") {
+            binding.analysisBackgroundIv.setImageResource(R.drawable.background_purple)
+        } else if(setting.themeColor == "#FFAAD7") {
+            binding.analysisBackgroundIv.setImageResource(R.drawable.background_pink)
+        }
+        binding.analysisPeriodTv.text = "최근 ${(setting.analysisPeriod / 7)}주"
+
+        setting.addSaveDataOrder(object : DiaryMateSetting.SaveDataOrder {
+            override fun order() {
+                if(setting.themeColor == "#FF8A7D") {
+                    binding.analysisBackgroundIv.setImageResource(R.drawable.background_red)
+                } else if(setting.themeColor == "#FFD776") {
+                    binding.analysisBackgroundIv.setImageResource(R.drawable.background_yellow)
+                } else if(setting.themeColor == "#8ADC8C") {
+                    binding.analysisBackgroundIv.setImageResource(R.drawable.background_green)
+                } else if(setting.themeColor == "#88C8FF") {
+                    binding.analysisBackgroundIv.setImageResource(R.drawable.background_blue)
+                } else if(setting.themeColor == "#C1A5FF") {
+                    binding.analysisBackgroundIv.setImageResource(R.drawable.background_purple)
+                } else if(setting.themeColor == "#FFAAD7") {
+                    binding.analysisBackgroundIv.setImageResource(R.drawable.background_pink)
+                }
+
+                binding.analysisPeriodTv.text = "최근 ${(setting.analysisPeriod / 7)}주"
+            }
+        })
 
         binding.analysisTitleTv.setOnClickListener {
             if(keyword == Keyword.EMOTION) {

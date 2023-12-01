@@ -2,6 +2,7 @@ package ku.kpro.diary_mate.activity
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import io.realm.Realm
 import ku.kpro.diary_mate.R
 import ku.kpro.diary_mate.data.Diary
 import ku.kpro.diary_mate.databinding.ActivityDiaryBinding
+import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 
 
 class DiaryActivity : AppCompatActivity() {
@@ -67,6 +69,7 @@ class DiaryActivity : AppCompatActivity() {
             @SuppressLint("SetTextI18n")
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
                 val textView: TextView = holder.itemView.findViewById(R.id.hashtag_title_tv)
+                holder.itemView.backgroundTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
                 if(mode == Mode.EDIT && position == diary.hashtags.size) {
                     textView.visibility = View.GONE
                     holder.itemView.findViewById<TextView>(R.id.hashtag_hash).text = "\u271B"
@@ -122,8 +125,7 @@ class DiaryActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
             toast.cancel()
             if(mode == Mode.READ) {
-                binding.diaryActivityWriteBtn.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green_theme))
+                binding.diaryActivityWriteBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
                 binding.diaryActivityWriteAreaEt.isEnabled = true
                 binding.diaryActivityModeTv.text = "편집 모드"
                 toast.setText("편집 모드")

@@ -1,5 +1,7 @@
 package ku.kpro.diary_mate.etc
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -11,6 +13,7 @@ import ku.kpro.diary_mate.R
 import ku.kpro.diary_mate.data.ChatMessage
 import ku.kpro.diary_mate.databinding.ItemChattingChatbotBinding
 import ku.kpro.diary_mate.databinding.ItemChattingUserBinding
+import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 
 class ChatAdapter(private val messages: List<ChatMessage>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -27,6 +30,7 @@ class ChatAdapter(private val messages: List<ChatMessage>) : RecyclerView.Adapte
 
     class ChatbotMessageViewHolder(binding: ItemChattingChatbotBinding) : RecyclerView.ViewHolder(binding.root) {
         val messageTextView = binding.chattingChatbotTv
+        val icon = binding.chattingChatbotImg
     }
 
     // ViewHolder 객체를 생성, 반환
@@ -52,10 +56,12 @@ class ChatAdapter(private val messages: List<ChatMessage>) : RecyclerView.Adapte
             VIEW_TYPE_USER_MESSAGE -> {
                 val userViewHolder = holder as UserMessageViewHolder
                 userViewHolder.messageTextView.text = message.message
+                userViewHolder.messageTextView.backgroundTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
             }
             VIEW_TYPE_CHATBOT_MESSAGE -> {
                 val chatbotViewHolder = holder as ChatbotMessageViewHolder
                 chatbotViewHolder.messageTextView.text = message.message
+                chatbotViewHolder.icon.backgroundTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
             }
         }
     }
