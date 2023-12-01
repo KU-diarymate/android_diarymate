@@ -11,6 +11,16 @@ data class DiaryMateSetting(
     var themeColor : String
 ) {
 
+    interface SaveDataOrder {
+        fun order()
+    }
+
+    private var orderList = ArrayList<SaveDataOrder>()
+
+    fun addSaveDataOrder(order : SaveDataOrder) {
+        orderList.add(order)
+    }
+
     companion object {
         fun getDefaultSetting() : DiaryMateSetting {
             return DiaryMateSetting(true, true, true, true, 28, "#8ADC8C")
@@ -25,6 +35,10 @@ data class DiaryMateSetting(
         pref.setBoolean("usePastDiaryFunc", usePastDiaryFunc)
         pref.setInt("analysisPeriod", analysisPeriod)
         pref.setString("themeColor", themeColor)
+
+        orderList.forEach { o ->
+            o.order()
+        }
     }
 
     // 설정을 SharedPreferences에서 불러오기
