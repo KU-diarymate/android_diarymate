@@ -59,7 +59,7 @@ class DiaryFragment : Fragment() {
             }
         })
 
-        binding.randomDiaryButton.setOnClickListener {
+        binding.diaryIconIv.setOnClickListener {
             val randomDiaryGenerator = RandomDiaryGenerator()
             val diaryNotificationManager = DiaryNotificationManager(requireContext)
             val randomDiary = randomDiaryGenerator.getRandomDiary()

@@ -157,30 +157,30 @@ class DiaryActivity : AppCompatActivity() {
         }
     }
 
-    private fun hashtagChat() {
-        apiHandler.callApi_extract(diary.context , object : Chatbot.ApiListener {
-            override fun onResponse(response: Any) {
-                val hashtaglist = response.toString().split(",")
-                for(tag in hashtaglist){
-                    diary.hashtags.add(tag)
-                }
-                binding.diaryActivityHashtagRv.adapter?.notifyDataSetChanged()
-                //response.toString() = hashtahslist
-                apiHandler.callApi_classify(response.toString(), object : Chatbot.ApiListener {
-                    override fun onResponse(response: Any) {
-                        //여기에 분류된 키워드들 입력
-                    }
-                    override fun onFailure(error: String) {
-                        Log.d("tintin", "onFailure: $error")
-                        Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
-                    }
-                })
-            }
-            override fun onFailure(error: String) {
-                Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
+//    private fun hashtagChat() {
+//        apiHandler.callApi_extract(diary.context , object : Chatbot.ApiListener {
+//            override fun onResponse(response: Any) {
+//                val hashtaglist = response.toString().split(",")
+//                for(tag in hashtaglist){
+//                    diary.hashtags.add(tag)
+//                }
+//                binding.diaryActivityHashtagRv.adapter?.notifyDataSetChanged()
+//                //response.toString() = hashtahslist
+//                apiHandler.callApi_classify(response.toString(), object : Chatbot.ApiListener {
+//                    override fun onResponse(response: Any) {
+//                        //여기에 분류된 키워드들 입력
+//                    }
+//                    override fun onFailure(error: String) {
+//                        Log.d("tintin", "onFailure: $error")
+//                        Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+//                    }
+//                })
+//            }
+//            override fun onFailure(error: String) {
+//                Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+//            }
+//        })
+//    }
 
     private fun diarychat() {
         val realm = Realm.getDefaultInstance()
@@ -206,9 +206,7 @@ class DiaryActivity : AppCompatActivity() {
         apiHandler.callApi_makeDiary(userDialog, object : Chatbot.ApiListener {
             override fun onResponse(response: Any) {
                 diary.context = response.toString()
-                if(diary.hashtags.isEmpty()) {
-                    hashtagChat()
-                }
+                binding.diaryActivityWriteAreaEt.setText(diary.context)
             }
             override fun onFailure(error: String) {
                 Log.d("tintin", "onFailure: $error")
@@ -220,7 +218,6 @@ class DiaryActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         sortHashtags()
-        saveDiary()
     }
 
     private fun getDiary() {
@@ -244,7 +241,27 @@ class DiaryActivity : AppCompatActivity() {
 
     private fun sortHashtags() {
         // 해시태그 분류 하는 로직
-        diary.emotionalHashtags.addAll(diary.hashtags)
+        val chatBot = Chatbot()
+        val str = diary.hashtags.joinToString(",")
+        chatBot.callApi_classify(str, object : Chatbot.ApiListener {
+            override fun onResponse(response: Any) {
+                Log.d("tintin", "onResponse: $response")
+                val tmp = response.toString().split(":::")
+                val list1 = tmp[0].split(",")
+                val list2 = tmp[1].split(",")
+                diary.emotionalHashtags.clear()
+                diary.dailyHashtags.clear()
+                diary.dailyHashtags.addAll(list1)
+                diary.emotionalHashtags.addAll(list2)
+
+                saveDiary()
+            }
+
+            override fun onFailure(error: String) {
+                Log.d("tintin", "classify onFailure: $error")
+                Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
 }

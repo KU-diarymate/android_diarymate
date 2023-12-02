@@ -1,18 +1,5 @@
 package ku.kpro.diary_mate.etc
 
-import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import ku.kpro.diary_mate.R
-import ku.kpro.diary_mate.activity.MainActivity
-import ku.kpro.diary_mate.fragment.ChattingFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -90,7 +77,7 @@ class Chatbot() {
     }
 
     private val JSON = "application/json; charset=utf-8".toMediaType()
-    private val MY_SECRET_KEY = "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"
+    private val MY_SECRET_KEY = "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"
     private lateinit var client: OkHttpClient
 
     interface ApiListener {
@@ -361,8 +348,8 @@ class Chatbot() {
             아까 운동하는데 몸 좋은 사람들이 많더라,, 나도 꾸준히 운동해서 그 사람들 만큼 몸이 좋아지면 좋겠다.
             점심으로 쌀국수 먹었는데 왜 이렇게 면이랑 국물이랑 따로 노는 것 같지.
             진짜 맛없었어,, 아 다음에는 절대 학식 쌀국수는 안먹어야지. 점심이 너무 맛이 없었어서 저녁에는 좀 비싼거 먹어야겠다
-            해당 내용에서 주요 키워드는 운동, 다짐, 점심, 쌀국수, 학식, 맛없음, 저녁
-            키워드는 모두 , 를 이용해서 나열. 키워드 나열된 리스트 단 하나만 출력.
+            해당 내용에서 주요 키워드는 운동,다짐,점심,쌀국수,학식,맛없음,저녁
+            키워드는 모두 ,를 이용해서 나열. 키워드 나열된 리스트 단 하나만 출력.
             """
 
             try {
@@ -435,8 +422,21 @@ class Chatbot() {
             val baseAi = JSONObject()
             val userMsg = JSONObject()
             var classifyPropmpt = """  
-            추출된 키워드를 줄게. 키워드를 일상 키워드와 감정 키워드로 분류해줘.각 키워드들은  ,로 이어붙여
-            $question
+            키워드를 일상 키워드와 감정 키워드로 분류.각 키워드들은 ,로 이어붙이기.
+            결과를 출력은 일상 키워드를 ,를 이용해 이어 붙인 뒤, 일상 키워드가 모두 끝나면 :::를 출력한 뒤 감정 키워드를 , 를 이용해 이어붙이기. 콤마(,)사이에는 공백을 두지 마. 키워드나열한 문장을 제외하고는 아무것도 출력하면 안됨.
+
+            키워드를 제외하고는 문자는 들어가면 안됨
+            몇가지 예시
+            
+            예시 1
+            입력 : ‘피아노,고단,피곤,설렘,수업,학교,바둑’
+            피아노,수업,학교,바둑:::고단,피곤,설렘
+            
+            예시 2
+            입력 : ‘박물관,축구,짜릿함,농구,불안,서러움,우울,독서’
+            박물관,축구,농구,독서:::짜릿함,불안,서러움,우울
+            
+            사용자 입력은 '$question’
             """
 
             try {
@@ -503,12 +503,12 @@ class Chatbot() {
         }
     }
 
-    fun callApi_question_first(question: String, listener: ApiListener) {
+    fun callApi_question_first(keyword: String, listener: ApiListener) {
         GlobalScope.launch(Dispatchers.IO) {
             val arr = JSONArray()
             val baseAi = JSONObject()
             val userMsg = JSONObject()
-            val scenario = "아침에 많이 안피곤해?"   // 시간정보와 해당 시간정보에 해당하는 시나리오를 여기에 랜덤으로 넣으면 됩니다 - 1201 재윤
+            val scenario = questions.random()   // 시간정보와 해당 시간정보에 해당하는 시나리오를 여기에 랜덤으로 넣으면 됩니다 - 1201 재윤
             var firstQuestionPropmpt = """
             시나리오는, 생성할 질문의 원형
             키워드는, 사용자의 일상에 관한 키워드
@@ -537,7 +537,7 @@ class Chatbot() {
             출력 - 저녁에 잡생각이 많이 들어서 시간을 많이 쓰는거야? 그러지 말고 주변을 둘러보며 좋게 저녁을 마무리 할 수 있지 않을까?
             사전 정보:
             시나리오 - $scenario
-            키워드 - `$question
+            키워드 - `$keyword
             출력 -
             """
             try {
@@ -570,9 +570,15 @@ class Chatbot() {
                 .post(body)
                 .build()
 
-            client = OkHttpClient.Builder().build()
+            val clientLocal = OkHttpClient.Builder()
+                .connectTimeout(90, TimeUnit.SECONDS) // 연결 타임아웃
+                .readTimeout(90, TimeUnit.SECONDS)    // 읽기 타임아웃
+                .writeTimeout(90, TimeUnit.SECONDS)   // 쓰기 타임아웃
+                .build()
 
-            client.newCall(request).enqueue(object : Callback {
+            //client = OkHttpClient.Builder().build()
+
+            clientLocal.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     Handler(Looper.getMainLooper()).post {
                         listener?.onFailure("Failed to load response due to ${e.message}")
