@@ -148,7 +148,7 @@ class Chatbot() {
                 baseAi.put("content", "너는 23살 대학생이고 오늘 있었던 일을 바탕으로 일기를 작성하는 역할이야.")
 
                 userMsg.put("role", "user")
-                userMsg.put("content", "")
+                userMsg.put("content", dairy_propmpt)
 
                 arr.put(baseAi)
                 arr.put(userMsg)
@@ -291,7 +291,7 @@ class Chatbot() {
             val arr = JSONArray()
             val baseAi = JSONObject()
             val userMsg = JSONObject()
-            var classify_propmpt = """
+            var classifyPropmpt = """  
             추출된 키워드를 줄게. 키워드를 일상 키워드와 감정 키워드로 분류해줘.각 키워드들은  ,로 이어붙여
             $question
             """
@@ -301,7 +301,7 @@ class Chatbot() {
                 baseAi.put("content", "입력받은 내용으로 키워드를 일상 키워드와 감정 키워드로 분류해.")
 
                 userMsg.put("role", "user")
-                userMsg.put("content", classify_propmpt)
+                userMsg.put("content", classifyPropmpt)
 
                 arr.put(baseAi)
                 arr.put(userMsg)
@@ -366,20 +366,43 @@ class Chatbot() {
             val baseAi = JSONObject()
             val userMsg = JSONObject()
             val scenario = "아침에 많이 안피곤해?"   // 시간정보와 해당 시간정보에 해당하는 시나리오를 여기에 랜덤으로 넣으면 됩니다 - 1201 재윤
-            var classify_propmpt = """
-            친구에게 할 질문의 시나리오는 "$scenario" 이고,
-            어제 대화 키워드는 $question 이고 이 키워드 중 시나리오와 어울리는 키워드를 뽑아 시나리오와 연결지어 사용자에게 질문을 해줘.
-            예시를 하나 들어줄게. 만약 시나리오가 "점심은 먹었어?" 이고, 어제 키워드는 학교, 지하철, 프로젝트, 잡상인, 강매, 종강, 힘듦, 아무것도 하기 싫음, 학식이고 
-            이 키워드 중 시나리오와 어울리는 키워드를 뽑아 사용자에게 할 질문은 "오늘도 점심으로 학식을 먹을거야? "
-            결과는 질문 단 한문장만 출력해줘. 오늘도 점심으로 학식을 먹을거야? 처럼 한 문장만 출력해.
-            """
+            var firstQuestionPropmpt = """
+            시나리오는, 생성할 질문의 원형
+            키워드는, 사용자의 일상에 관한 키워드
 
+            사전 정보로 주어진 키워드 중, 사전 정보의 시나리오의 문맥과 가장 어울리는 것을 한 개만 선택할 것.
+            선택한 키워드 기반으로, 사용자의 일상에 대해 묻는 질문이 될 수 있도록, 시나리오를 한두 줄 이내로 적절히 수정.
+            이때 수정된 시나리오는 문장 안에서 자연스러운 맥락을 형성해야 하며, 논리 전개가 이상하거나 비문이 되어서는 안 됨.
+            친한 20대 친구와 주고받는 대화임을 고려하여, 친근한 말투 사용.
+            질문자의 정보가 시나리오 수정에 반영되어서는 안 됨.
+            출력에는, 사전 정보 또는 선택한 키워드 등의 다른 정보가 일절 포함되어선 안 되며,
+            수정된 시나리오 한 줄만을 온전히 출력할 것
+
+            질문 생성 과정 예시:
+            예시 1 
+            시나리오 - 아침에 많이 안 피곤해?
+            키워드 - 운동, 피곤, 학식, 쌀국수, 맛없음, 다짐, 프로젝트
+            출력 -
+            운동도 하고 프로젝트도 하면서 힘들었을 텐데 아침에 많이 안 피곤해?
+            예시 2
+            시나리오 -  점심은 먹었어?
+            키워드 - 학교, 지하철, 프로젝트, 잡상인, 강매, 종강, 힘듦, 아무것도 하기 싫음, 학식, 마라탕, 순두부찌개
+            출력 - 점심은 맛있는거 먹었어? 학교에서 프로젝트 때문에 되게 힘들었을텐데 맛있는거 먹고 기운 내보자.
+            예시 3
+            시나리오 - 저녁을 어떻게 마무리하고 싶어?
+            키워드 - 군대, 휴가, 전역, 얼굴, 다행, 마음, 기분, 공익, 입대, 죽상, 몸, 학교 복학, 쉬다, 학기, 시간, 친구, 여행, 주변, 제대, 생각, 잡생각, 철
+            출력 - 저녁에 잡생각이 많이 들어서 시간을 많이 쓰는거야? 그러지 말고 주변을 둘러보며 좋게 저녁을 마무리 할 수 있지 않을까?
+            사전 정보:
+            시나리오 - $scenario
+            키워드 - `$question
+            출력 -
+            """
             try {
                 baseAi.put("role", "user")
-                baseAi.put("content", "너는 채팅으로 너의 친한 20대 친구에게 질문하는 역할이야.")
+                baseAi.put("content", "너는 23살의 대학생이고 친근하고 공감을 잘 해주는 성격이야. 동갑의 대학생 친구에게 존댓말은 하지 않고 질문을 하는 역할이야")
 
                 userMsg.put("role", "user")
-                userMsg.put("content", classify_propmpt)
+                userMsg.put("content", firstQuestionPropmpt)
 
                 arr.put(baseAi)
                 arr.put(userMsg)
@@ -433,7 +456,6 @@ class Chatbot() {
                         }
                     }
                 }
-
             })
         }
     }
