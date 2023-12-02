@@ -15,6 +15,8 @@ import ku.kpro.diary_mate.custom_view.CustomCalendarView
 import ku.kpro.diary_mate.activity.DiaryActivity
 import ku.kpro.diary_mate.data.DiaryMateSetting
 import ku.kpro.diary_mate.databinding.FragmentDiaryBinding
+import ku.kpro.diary_mate.etc.DiaryNotificationManager
+import ku.kpro.diary_mate.etc.RandomDiaryGenerator
 import ku.kpro.diary_mate.etc.DiaryMateApplication
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 import java.text.SimpleDateFormat
@@ -56,6 +58,16 @@ class DiaryFragment : Fragment() {
                 }
             }
         })
+
+        binding.randomDiaryButton.setOnClickListener {
+            val randomDiaryGenerator = RandomDiaryGenerator()
+            val diaryNotificationManager = DiaryNotificationManager(requireContext)
+            val randomDiary = randomDiaryGenerator.getRandomDiary()
+            if (randomDiary != null) {
+                diaryNotificationManager.sendNotification(randomDiary)
+            }
+        }
+
         binding.diaryIconIv.imageTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
 
         setting.addSaveDataOrder(object : DiaryMateSetting.SaveDataOrder {

@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
@@ -21,12 +22,14 @@ import ku.kpro.diary_mate.data.DiaryMateSetting
 import ku.kpro.diary_mate.fragment.SettingFragment
 import ku.kpro.diary_mate.databinding.ActivityMainBinding
 import ku.kpro.diary_mate.etc.ChatbotService
+import ku.kpro.diary_mate.etc.DiaryMateApplication
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.pref
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ChattingFragment.FabClickListener {
 
     private lateinit var binding : ActivityMainBinding
+    private lateinit var chattingFragment: ChattingFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,7 +114,12 @@ class MainActivity : AppCompatActivity() {
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> DiaryFragment()
-                1 -> ChattingFragment()
+                1 -> {
+                    chattingFragment = ChattingFragment()
+                    chattingFragment.setFabClickListener(this@MainActivity)
+                    (applicationContext as? DiaryMateApplication)?.currentChattingFragment = chattingFragment
+                    Log.e("ChattingFragment", "fragment attached")
+                    chattingFragment }
                 2 -> AnalysisFragment()
                 3 -> SettingFragment()
                 else -> error("no such position: $position")
@@ -136,6 +144,11 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         setting.saveSettingData(pref)
+    }
+
+    override fun onFabClick() {
+        val serviceIntent = Intent(this, ChatbotService::class.java)
+        startService(serviceIntent)
     }
 
 }
