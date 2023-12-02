@@ -1,12 +1,9 @@
 package ku.kpro.diary_mate.fragment
 
-import android.content.Context
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.realm.Realm
 import ku.kpro.diary_mate.data.ChatMessage
+import ku.kpro.diary_mate.data.Diary
 import ku.kpro.diary_mate.data.DiaryMateSetting
 import ku.kpro.diary_mate.databinding.FragmentChattingBinding
 import ku.kpro.diary_mate.etc.ChatAdapter
 import ku.kpro.diary_mate.etc.Chatbot
-import ku.kpro.diary_mate.etc.DiaryMateApplication
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.addNewMessage
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.pref
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
@@ -83,7 +80,39 @@ class ChattingFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            fabClickListener?.onFabClick()
+            //fabClickListener?.onFabClick()
+            val chatBot = Chatbot()
+            chatBot.callApi_extract(getLogs(), object : Chatbot.ApiListener {
+                override fun onResponse(response: Any) {
+                    Log.d("tintin", "onResponse: $response")
+                    val realm = Realm.getDefaultInstance()
+                    val dateString =
+                        SimpleDateFormat("yyyy년 MM월 dd일 E요일", Locale.KOREA).format(Date(System.currentTimeMillis()))
+                    val diary = realm.where(Diary::class.java).equalTo("date", dateString).findFirst() ?: Diary()
+                    realm.beginTransaction()
+                    if(diary.date.isNullOrEmpty()) diary.date = dateString
+                    diary.hashtags.addAll(response.toString().split(","))
+                    realm.copyToRealmOrUpdate(diary)
+                    realm.commitTransaction()
+
+                    chatBot.callApi_question_first(response.toString(),
+                        object : Chatbot.ApiListener {
+                            override fun onResponse(response: Any) {
+                                arriveMessage(response.toString())
+                            }
+
+                            override fun onFailure(error: String) {
+                                Log.d("tintin", "question onFailure: $error")
+                                Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                }
+
+                override fun onFailure(error: String) {
+                    Log.d("tintin", "extract onFailure: $error")
+                    Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
         binding.chattingSendBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
@@ -95,6 +124,25 @@ class ChattingFragment : Fragment() {
             }
         })
 
+    }
+
+    private fun getLogs(): String {
+        val realm = Realm.getDefaultInstance()
+
+        val parsedDate = Date(System.currentTimeMillis())
+        val targetFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+        val formattedDateStr: String = targetFormat.format(parsedDate)
+
+        val userMessages = realm.where(ChatMessage::class.java).equalTo("date", formattedDateStr)
+            .equalTo("sender", "User").findAll()
+        val messageStringBuilder = StringBuilder()
+
+        // 각 메시지를 문자열에 추가
+        for (message in userMessages) {
+            messageStringBuilder.append(message.message)
+            messageStringBuilder.append(",,") // 콤마로 구분
+        }
+        return messageStringBuilder.toString()
     }
 
     private fun getMessages() {
