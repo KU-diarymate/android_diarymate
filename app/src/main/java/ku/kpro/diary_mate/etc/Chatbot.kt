@@ -29,68 +29,68 @@ import org.json.JSONObject
 import java.io.IOException
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
+import java.util.concurrent.TimeUnit
 
 class Chatbot() {
 
     private val questions = listOf(
-        "오늘 어떤 일이 있었나요?",
-        "하루 중 가장 기억에 남는 순간은 무엇이었나요?",
-        "오늘 특별한 일이 있었나요?",
-        "오늘 아침에 눈을 뜨고 가장 먼저 한 일은 무엇이었나요?",
-        "아침에 일어나서 가장 먼저 떠오른 생각은 무엇이었나요?",
-        "아침 식사로 먹은 음식은 무엇이었나요?",
-        "오늘의 날씨는 어떤가요?",
-        "출근이나 학교 등 일상적인 시작을 어떻게 했나요?",
-        "오늘의 일정 중에서 가장 기대되는 부분은 무엇인가요?",
-        "가장 어려웠던 순간은 무엇이었나요?",
-        "점심 식사로 먹은 것은 무엇이었나요?",
-        "오후에 특별한 일이 있었나요?",
-        "일상 속에서 웃은 일이 있었나요?",
-        "오늘 마주한 도전적인 상황에 대처한 방법은 무엇이었나요?",
-        "가장 기억에 남는 대화는 어떤 내용이었나요?",
-        "저녁 식사로 먹은 것은 무엇이었나요?",
-        "일상 생활에서 새롭게 시도한 것이 있었나요?",
-        "오늘 하루를 한 마디로 표현한다면 무엇이어야 할까요?",
-        "가장 힘들었던 순간에 힘을 얻은 곳은 어디인가요?",
-        "하루 중에 가장 편안한 순간은 언제였나요?",
-        "오늘의 일상 속에서 느낀 감사한 순간이 있었나요?",
-        "가장 큰 도전이었던 일은 무엇이었나요?",
-        "하루 동안 어떤 사람들을 만났나요?",
-        "일상 속에서 느낀 성취감이 있는 일이 있었나요?",
-        "가장 인상 깊은 사건이나 경험은 무엇이었나요?",
-        "오늘 하루 동안 배운 것이 있었나요?",
-        "일상 생활에서 가장 중요하게 생각하는 가치는 무엇인가요?",
-        "가장 기대하는 일은 무엇인가요?",
-        "하루를 정리하면서 가장 뿌듯했던 순간은 언제였나요?",
-        "가장 소중한 물건이나 사람에 대한 생각이 있나요?",
-        "하루 중에 자주 하는 생각이나 고민이 있었나요?",
-        "가장 좋아하는 일상적인 활동은 무엇인가요?",
-        "오늘 하루 동안의 목표를 어떻게 설정했나요?",
-        "일상 속에서 자주 하는 생각 중 하나를 공유해 주세요.",
-        "가장 행복한 순간은 언제였나요?",
-        "오늘 하루 동안 무엇을 배운 것 같아요?",
-        "일상에서 자주 하는 습관이 있나요?",
-        "가장 좋아하는 날씨는 무엇인가요?",
-        "하루를 마무리하면서 가장 소중한 생각은 무엇인가요?",
-        "오늘 하루 동안의 변화를 느낀 순간이 있었나요?",
-        "일상 속에서 자주 듣는 음악 장르가 있나요?",
-        "가장 피곤한 순간은 언제였나요?",
-        "오늘의 일정을 기록한 것 중에서 가장 중요한 일은 무엇인가요?",
-        "가장 좋아하는 색깔은 무엇인가요?",
-        "일상 생활에서 자주 마주치는 문제 중 하나는 무엇인가요?",
-        "가장 기억에 남는 꿈을 최근에 꾸었나요?",
-        "하루 동안 가장 많이 한 활동은 무엇인가요?",
-        "오늘 하루 동안의 목표를 어떻게 설정했나요?"
+        "오늘 어떤 일 있었어?",
+        "하루 중에 가장 기억에 남는 순간은 뭐였어?",
+        "오늘 특별한 일 있었어?",
+        "아침에 눈 뜨자마자 뭐 했어?",
+        "일어나서 가장 먼저 떠오른 생각이 뭐야?",
+        "아침에 뭘 먹었어?",
+        "오늘 날씨 어때?",
+        "출근이나 학교 시작은 어떻게 했어?",
+        "오늘 일정 중에서 가장 기대되는 건 뭐야?",
+        "가장 어려웠던 순간은 뭐야?",
+        "점심에 뭐 먹었어?",
+        "오후에 특별한 일 있었어?",
+        "웃은 일 있었어?",
+        "오늘 마주한 어려운 상황 어떻게 해결했어?",
+        "가장 기억에 남는 대화는 뭔데?",
+        "저녁에 뭐 먹었어?",
+        "일상에서 새로 시도한 게 있었어?",
+        "오늘을 한 마디로 표현한다면 뭐라고 할래?",
+        "가장 힘들었던 순간에 힘을 얻은 곳은 어디야?",
+        "하루 중에 가장 편안한 순간은 언제였어?",
+        "오늘 일상에서 느낀 감사한 순간 있었어?",
+        "가장 큰 도전이었던 일은 뭐야?",
+        "오늘 누구 만났어?",
+        "일상에서 성취감 느낀 일 있었어?",
+        "가장 인상 깊은 사건이나 경험은 뭐야?",
+        "오늘 배운 게 있었어?",
+        "일상에서 중요하게 생각하는 가치가 뭐야?",
+        "가장 기대하는 일은 뭐야?",
+        "하루 정리하면서 뿌듯했던 순간 언제였어?",
+        "가장 소중한 물건이나 사람에 대한 생각 있어?",
+        "하루 중에 자주 하는 생각이나 고민이 있었어?",
+        "가장 좋아하는 일상적인 활동 뭐야?",
+        "오늘 하루 목표 어떻게 설정했어?",
+        "일상에서 자주 하는 생각 중 하나 공유해봐.",
+        "가장 행복한 순간은 언제였어?",
+        "오늘 뭐 배운 거 같아?",
+        "일상에서 자주 하는 습관 있어?",
+        "가장 좋아하는 날씨는 뭐야?",
+        "하루를 마무리하면서 가장 소중한 생각은 뭐야?",
+        "오늘 변화를 느낀 순간 있었어?",
+        "자주 듣는 음악 장르가 있어?",
+        "가장 피곤한 순간은 언제였어?",
+        "오늘 일정 중 가장 중요한 일은 뭐야?",
+        "가장 좋아하는 색깔은 뭐야?",
+        "일상에서 자주 마주치는 문제 중 하나는 뭐야?",
+        "최근에 기억에 남는 꿈 꾸었어?",
+        "하루 중에 가장 많이 한 활동은 뭐야?",
+        "오늘 목표 어떻게 설정했어?"
     )
-
 
     fun getQuestions() : String {
         return questions.random()
     }
-    private var listener: ApiListener?=null
 
     private val JSON = "application/json; charset=utf-8".toMediaType()
-    private val MY_SECRET_KEY = "노션에서 꺼내 쓰시면 됩니다."
+    private val MY_SECRET_KEY = "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"
     private lateinit var client: OkHttpClient
 
     interface ApiListener {
@@ -98,15 +98,12 @@ class Chatbot() {
         fun onFailure(error: String)
     }
 
-    fun setOnapiListener(listener :ApiListener ){
-        this.listener = listener
-    }
-    fun callApi_forchat(question: String) {
+    fun callApi_forchat(question: String, listener: ApiListener) {
         GlobalScope.launch(Dispatchers.IO) {
             val arr = JSONArray()
             val baseAi = JSONObject()
             val userMsg = JSONObject()
-
+            Log.d("tintin", "callApi_forchat: $question")
             try {
                 baseAi.put("role", "user")
                 baseAi.put("content", "You are a 23years old friend who talks in a friendly way without honorifics.")
@@ -153,9 +150,11 @@ class Chatbot() {
                             val jsonArray = jsonObject.getJSONArray("choices")
                             val result =
                                 jsonArray.getJSONObject(0).getJSONObject("message").getString("content")
+                            Log.d("tintin", "result:$result ")
                             Handler(Looper.getMainLooper()).post {
                                 //통신이 성공하면 역기서 결과만 추출하여 건네주네
                                 listener?.onResponse(result.trim())
+
                             }
                         } catch (e: JSONException) {
                             e.printStackTrace()
@@ -170,12 +169,16 @@ class Chatbot() {
         }
     }
 
-    fun callApi_summarize(question: String) {
+    fun callApi_makeDiary(question: String, listener: ApiListener) {
         GlobalScope.launch(Dispatchers.IO) {
             val arr = JSONArray()
             val baseAi = JSONObject()
             val userMsg = JSONObject()
-            var dairy_propmpt = question +"\n+위의 사용자의 대화를 기반으로 일기를 작성해줘\n" + """
+            Log.d("tintin", "callApi_forchat: $question")
+            var dairyPropmpt = """
+            $question 
+            사용자의 대화를 ,,를 사용해서 구분지어 나타냈음.
+            사용자의 대화를 기반으로 일기를 작성해줘.
             일기의 예시를 들어줄게
             오늘은 종강한 첫 날이다. 지금까지 과제하고 또 시험 준비하다가 이렇게 갑자기 아무것도 할게 없어지니 되게 기분이 이상하다. 그래도 지금까지 꽤 힘들게 시험
             준비를 해서 그런지 되게 후련하고 안도감이 많이든다.
@@ -186,14 +189,17 @@ class Chatbot() {
             군대에서 휴가 나온 친구를 만나고 왔다. 3개월 뒤 전역이라 얼굴이 그래도 좀 좋아 보여서 다행이라고 생각했다.
             난 몸이 안좋아 공익이라 군대는 모르겠지만 입대하는 친구들이 다 죽상이라 가끔 가다보면 마음이 좀 안좋았는데 전역이 코앞이니 나도 좀 기분이 나아진다.
             이제 바로 전역하고 학교 복학은 안하고 좀 쉬려는 모양이다. 나도 학기중에 시간 되면 친구랑 여행이나 가고싶다. 주변 친구들이 얼른 제대해서 예전처럼 아무생각 없이 다 같이 여행이나 다니면 좋겠다.
-            이놈들이랑 있으면 그래도 잡생각은 안들어서 좋다. 그래도 철 좀 들었으면 하는 마음이다"""
+            이놈들이랑 있으면 그래도 잡생각은 안들어서 좋다. 그래도 철 좀 들었으면 하는 마음이다
+            
+            위의 예시를 참고해서 일기를 작성해. 다만 예시의 내용을 직접 일기 작성에 집어넣지 마.
+            """
 
             try {
                 baseAi.put("role", "user")
-                baseAi.put("content", "너는 23살 대학생이고 오늘 있었던 일을 바탕으로 일기를 작성하는 역할이야.")
+                baseAi.put("content", "")
 
                 userMsg.put("role", "user")
-                userMsg.put("content", dairy_propmpt)
+                userMsg.put("content", dairyPropmpt)
 
                 arr.put(baseAi)
                 arr.put(userMsg)
@@ -218,9 +224,15 @@ class Chatbot() {
                 .post(body)
                 .build()
 
-            client = OkHttpClient.Builder().build()
+                val clientLocal = OkHttpClient.Builder()
+                .connectTimeout(90, TimeUnit.SECONDS) // 연결 타임아웃
+                .readTimeout(90, TimeUnit.SECONDS)    // 읽기 타임아웃
+                .writeTimeout(90, TimeUnit.SECONDS)   // 쓰기 타임아웃
+                .build()
 
-            client.newCall(request).enqueue(object : Callback {
+            //client = OkHttpClient.Builder().build()
+
+            clientLocal.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     Handler(Looper.getMainLooper()).post {
                         listener?.onFailure("Failed to load response due to ${e.message}")
@@ -234,9 +246,11 @@ class Chatbot() {
                             val jsonArray = jsonObject.getJSONArray("choices")
                             val result =
                                 jsonArray.getJSONObject(0).getJSONObject("message").getString("content")
+                            Log.d("tintin", "result:$result ")
                             Handler(Looper.getMainLooper()).post {
                                 //통신이 성공하면 역기서 결과만 추출하여 건네주네
                                 listener?.onResponse(result.trim())
+
                             }
                         } catch (e: JSONException) {
                             e.printStackTrace()
@@ -247,12 +261,94 @@ class Chatbot() {
                         }
                     }
                 }
-
             })
         }
     }
 
-    fun callApi_extract(question: String) {
+
+//    fun callApi_makeDiary(question: String, listener: ApiListener) {
+//        GlobalScope.launch(Dispatchers.IO) {
+//            Log.d("tintin", "callApi_makeDiary: $question")
+//            val arr = JSONArray()
+//            val baseAi = JSONObject()
+//            val userMsg = JSONObject()
+//            var dairyPropmpt = """
+//            $question
+//            사용자의 대화를 ,,를 사용해서 구분지어 나타냈음.
+//            사용자의 대화를 기반으로 일기를 작성해줘
+//            """
+//
+//            try {
+//                baseAi.put("role", "user")
+//                baseAi.put("content", "너는 23살 대학생이고 오늘 있었던 일을 바탕으로 일기를 작성하는 역할이야.")
+//
+//                userMsg.put("role", "user")
+//                userMsg.put("content", dairyPropmpt)
+//
+//                arr.put(baseAi)
+//                arr.put(userMsg)
+//            } catch (e: JSONException) {
+//                e.printStackTrace()
+//            }
+//
+//            val json = JSONObject()
+//
+//            try {
+//                json.put("model", "gpt-3.5-turbo")
+//                json.put("messages", arr)
+//            } catch (e: JSONException) {
+//                e.printStackTrace()
+//            }
+//
+//            val body = json.toString().toRequestBody(JSON)
+//
+//            val request = Request.Builder()
+//                .url("https://api.openai.com/v1/chat/completions")
+//                .header("Authorization", "Bearer $MY_SECRET_KEY")
+//                .post(body)
+//                .build()
+//
+//            val clientLocal = OkHttpClient.Builder()
+//                .connectTimeout(20, TimeUnit.SECONDS) // 연결 타임아웃
+//                .readTimeout(20, TimeUnit.SECONDS)    // 읽기 타임아웃
+//                .writeTimeout(20, TimeUnit.SECONDS)   // 쓰기 타임아웃
+//                .build()
+//
+//            client = OkHttpClient.Builder().build()
+//
+//            client.newCall(request).enqueue(object : Callback {
+//                override fun onFailure(call: Call, e: IOException) {
+//                    Handler(Looper.getMainLooper()).post {
+//                        listener.onFailure("Failed to load response due to ${e.message}")
+//                    }
+//                }
+//                override fun onResponse(call: Call, response: Response) {
+//                    if (response.isSuccessful) {
+//                        try {
+//                            val jsonObject = JSONObject(response.body!!.string())
+//                            val jsonArray = jsonObject.getJSONArray("choices")
+//                            val result =
+//                                jsonArray.getJSONObject(0).getJSONObject("message").getString("content")
+//                            Log.d("tintin", "result : $result")
+//                            Handler(Looper.getMainLooper()).post {
+//                                //통신이 성공하면 역기서 결과만 추출하여 건네주네
+//                                listener.onResponse(result.trim())
+//                            }
+//                        } catch (e: JSONException) {
+//                            e.printStackTrace()
+//                        }
+//                    } else {
+//                        Handler(Looper.getMainLooper()).post {
+//                            listener.onFailure("Failed to load response due to ${response.body!!.string()}")
+//                        }
+//                    }
+//                }
+//
+//            })
+//        }
+//    }
+
+    fun callApi_extract(question: String, listener: ApiListener) {
         GlobalScope.launch(Dispatchers.IO) {
             val arr = JSONArray()
             val baseAi = JSONObject()
@@ -260,11 +356,13 @@ class Chatbot() {
             var extract_propmpt = """
             대화의 내용을 줄 테니 해당 대화 내용을 바탕으로 위와 같이 주요 키워드를 추출해줘.
             $question
+            사용자의 대화를 ,,를 사용해서 구분지어 나타냈음.
             키워드 추출의 예시를 들어줄게
             아까 운동하는데 몸 좋은 사람들이 많더라,, 나도 꾸준히 운동해서 그 사람들 만큼 몸이 좋아지면 좋겠다.
             점심으로 쌀국수 먹었는데 왜 이렇게 면이랑 국물이랑 따로 노는 것 같지.
             진짜 맛없었어,, 아 다음에는 절대 학식 쌀국수는 안먹어야지. 점심이 너무 맛이 없었어서 저녁에는 좀 비싼거 먹어야겠다
-            해당 내용에서 주요 키워드는 운동, 다짐, 점심, 쌀국수, 학식, 맛없음, 저녁 이야.
+            해당 내용에서 주요 키워드는 운동, 다짐, 점심, 쌀국수, 학식, 맛없음, 저녁
+            키워드는 모두 , 를 이용해서 나열. 키워드 나열된 리스트 단 하나만 출력.
             """
 
             try {
@@ -331,7 +429,7 @@ class Chatbot() {
         }
     }
 
-    fun callApi_classify(question: String) {
+    fun callApi_classify(question: String, listener: ApiListener) {
         GlobalScope.launch(Dispatchers.IO) {
             val arr = JSONArray()
             val baseAi = JSONObject()
@@ -405,7 +503,7 @@ class Chatbot() {
         }
     }
 
-    fun callApi_question_first(question: String) {
+    fun callApi_question_first(question: String, listener: ApiListener) {
         GlobalScope.launch(Dispatchers.IO) {
             val arr = JSONArray()
             val baseAi = JSONObject()

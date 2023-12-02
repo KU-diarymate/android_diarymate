@@ -21,9 +21,15 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import io.realm.Realm
 import ku.kpro.diary_mate.R
+import ku.kpro.diary_mate.data.ChatMessage
 import ku.kpro.diary_mate.data.Diary
 import ku.kpro.diary_mate.databinding.ActivityDiaryBinding
+import ku.kpro.diary_mate.etc.Chatbot
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 class DiaryActivity : AppCompatActivity() {
@@ -36,19 +42,22 @@ class DiaryActivity : AppCompatActivity() {
     private val context = this
     private var diary = Diary()
     private lateinit var date : String
+    private var apiHandler = Chatbot()
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDiaryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         date = intent.getStringExtra("date").toString()
+
         getDiary()
+
         binding.diaryActivityDateTv.text = date
         binding.diaryActivityBackBtn.setOnClickListener {
             finish()
         }
+
         binding.diaryActivityWriteAreaEt.addTextChangedListener {
             diary.context = binding.diaryActivityWriteAreaEt.text.toString()
         }
@@ -120,6 +129,7 @@ class DiaryActivity : AppCompatActivity() {
 
         binding.diaryActivityHashtagRv.adapter = adapter
 
+
         val toast = Toast(this)
         binding.diaryActivityWriteBtn.setOnClickListener {
             adapter.notifyDataSetChanged()
@@ -141,6 +151,70 @@ class DiaryActivity : AppCompatActivity() {
                 mode = Mode.READ
             }
         }
+        if(diary.context.isEmpty()) {
+            diarychat()
+            //다 끝나고 view에 반영을 한다
+        }
+    }
+
+    private fun hashtagChat() {
+        apiHandler.callApi_extract(diary.context , object : Chatbot.ApiListener {
+            override fun onResponse(response: Any) {
+                val hashtaglist = response.toString().split(",")
+                for(tag in hashtaglist){
+                    diary.hashtags.add(tag)
+                }
+                binding.diaryActivityHashtagRv.adapter?.notifyDataSetChanged()
+                //response.toString() = hashtahslist
+                apiHandler.callApi_classify(response.toString(), object : Chatbot.ApiListener {
+                    override fun onResponse(response: Any) {
+                        //여기에 분류된 키워드들 입력
+                    }
+                    override fun onFailure(error: String) {
+                        Log.d("tintin", "onFailure: $error")
+                        Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+            override fun onFailure(error: String) {
+                Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun diarychat() {
+        val realm = Realm.getDefaultInstance()
+
+        val originalDateStr = date //yyyy년 MM월 dd일 E요일
+        //val originalFormat = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 E요일", Locale.KOREA)
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+        val parsedDate = dateFormat.parse(originalDateStr.substring(0, 13))
+        //val parsedDate: LocalDate = LocalDate.parse(originalDateStr, originalFormat)
+        val targetFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+        val formattedDateStr: String = targetFormat.format(parsedDate)
+
+        val userMessages = realm.where(ChatMessage::class.java).equalTo("date", formattedDateStr).equalTo("sender", "User").findAll()
+        val messageStringBuilder = StringBuilder()
+
+        // 각 메시지를 문자열에 추가
+        for (message in userMessages) {
+            messageStringBuilder.append(message.message)
+            messageStringBuilder.append(",,") // 콤마로 구분
+        }
+        val userDialog = messageStringBuilder.toString()
+
+        apiHandler.callApi_makeDiary(userDialog, object : Chatbot.ApiListener {
+            override fun onResponse(response: Any) {
+                diary.context = response.toString()
+                if(diary.hashtags.isEmpty()) {
+                    hashtagChat()
+                }
+            }
+            override fun onFailure(error: String) {
+                Log.d("tintin", "onFailure: $error")
+                Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onDestroy() {
