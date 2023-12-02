@@ -1,10 +1,14 @@
 package ku.kpro.diary_mate.activity
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -14,6 +18,7 @@ import ku.kpro.diary_mate.fragment.AnalysisFragment
 import ku.kpro.diary_mate.fragment.ChattingFragment
 import ku.kpro.diary_mate.fragment.DiaryFragment
 import ku.kpro.diary_mate.R
+import ku.kpro.diary_mate.data.DiaryMateSetting
 import ku.kpro.diary_mate.fragment.SettingFragment
 import ku.kpro.diary_mate.databinding.ActivityMainBinding
 import ku.kpro.diary_mate.etc.ChatbotService
@@ -34,7 +39,40 @@ class MainActivity : AppCompatActivity(), ChattingFragment.FabClickListener {
         binding.mainPager.isUserInputEnabled = true
         binding.mainPager.adapter = ViewPagerAdapter(supportFragmentManager,lifecycle)
         binding.mainPager.registerOnPageChangeCallback(PageChangeCallback())
-        binding.mainBottomNav.setOnItemSelectedListener { navigationSelected(it) }
+        binding.mainBottomNav.setOnItemSelectedListener {
+            navigationSelected(it)
+        }
+
+        val colorStateList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_selected),
+                intArrayOf(-android.R.attr.state_selected)
+            ),
+            intArrayOf(
+                Color.parseColor(setting.themeColor),
+                ContextCompat.getColor(this@MainActivity, R.color.grey)
+            )
+        )
+
+        binding.mainBottomNav.itemIconTintList = colorStateList
+        binding.mainBottomNav.itemTextColor = colorStateList
+        setting.addSaveDataOrder(object : DiaryMateSetting.SaveDataOrder {
+            override fun order() {
+                val colorStateList2 = ColorStateList(
+                    arrayOf(
+                        intArrayOf(android.R.attr.state_selected),
+                        intArrayOf(-android.R.attr.state_selected)
+                    ),
+                    intArrayOf(
+                        Color.parseColor(setting.themeColor),
+                        ContextCompat.getColor(this@MainActivity, R.color.grey)
+                    )
+                )
+
+                binding.mainBottomNav.itemIconTintList = colorStateList2
+                binding.mainBottomNav.itemTextColor = colorStateList2
+            }
+        })
 
         val serviceIntent = Intent(this, ChatbotService::class.java)
         startService(serviceIntent)
@@ -48,6 +86,7 @@ class MainActivity : AppCompatActivity(), ChattingFragment.FabClickListener {
 
     private fun navigationSelected(item: MenuItem): Boolean {
         val checked = item.setChecked(true)
+
         when (checked.itemId) {
             R.id.diary_nav -> {
                 binding.mainPager.currentItem = 0

@@ -1,6 +1,9 @@
 package ku.kpro.diary_mate.fragment
 
 import android.content.Context
+import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,11 +15,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.realm.Realm
 import ku.kpro.diary_mate.data.ChatMessage
+import ku.kpro.diary_mate.data.DiaryMateSetting
 import ku.kpro.diary_mate.databinding.FragmentChattingBinding
 import ku.kpro.diary_mate.etc.ChatAdapter
 import ku.kpro.diary_mate.etc.DiaryMateApplication
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.addNewMessage
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.pref
+import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -68,6 +73,16 @@ class ChattingFragment : Fragment() {
         binding.fab.setOnClickListener {
             fabClickListener?.onFabClick()
         }
+
+        binding.chattingSendBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
+        setting.addSaveDataOrder(object : DiaryMateSetting.SaveDataOrder {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun order() {
+                binding.chattingSendBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
+                (binding.recyclerView.adapter as ChatAdapter).notifyDataSetChanged()
+            }
+        })
+
     }
 
     private fun getMessages() {

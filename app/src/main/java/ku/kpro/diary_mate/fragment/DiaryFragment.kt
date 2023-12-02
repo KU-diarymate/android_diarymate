@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +13,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ku.kpro.diary_mate.custom_view.CustomCalendarView
 import ku.kpro.diary_mate.activity.DiaryActivity
+import ku.kpro.diary_mate.data.DiaryMateSetting
 import ku.kpro.diary_mate.databinding.FragmentDiaryBinding
 import ku.kpro.diary_mate.etc.DiaryNotificationManager
 import ku.kpro.diary_mate.etc.RandomDiaryGenerator
+import ku.kpro.diary_mate.etc.DiaryMateApplication
+import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.setting
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -53,6 +58,7 @@ class DiaryFragment : Fragment() {
                 }
             }
         })
+
         binding.randomDiaryButton.setOnClickListener {
             val randomDiaryGenerator = RandomDiaryGenerator()
             val diaryNotificationManager = DiaryNotificationManager(requireContext)
@@ -61,6 +67,14 @@ class DiaryFragment : Fragment() {
                 diaryNotificationManager.sendNotification(randomDiary)
             }
         }
+
+        binding.diaryIconIv.imageTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
+
+        setting.addSaveDataOrder(object : DiaryMateSetting.SaveDataOrder {
+            override fun order() {
+                binding.diaryIconIv.imageTintList = ColorStateList.valueOf(Color.parseColor(setting.themeColor))
+            }
+        })
 
         return binding.root
     }

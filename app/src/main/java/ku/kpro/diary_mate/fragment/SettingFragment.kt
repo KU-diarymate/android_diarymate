@@ -1,5 +1,6 @@
 package ku.kpro.diary_mate.fragment
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -32,6 +33,7 @@ class SettingFragment : Fragment() {
         )
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,6 +51,8 @@ class SettingFragment : Fragment() {
         binding.settingPastBtn.setToggleOn(setting.usePastDiaryFunc)
         setToggleSetting()
 
+        // 기간 설정 불러오기
+        binding.settingAnalysisPeriodTv.text = (setting.analysisPeriod / 7).toString() + "주"
 
 //        테마색상 불러오기 관련 설정
         // 테마색상 체크 표시 설정
@@ -131,25 +135,27 @@ class SettingFragment : Fragment() {
         popupBinding.periodPopup1weekBtn.setOnClickListener {
             setting.analysisPeriod = 7
             binding.settingAnalysisPeriodTv.text = "1주"
+            setting.saveSettingData(pref)
             popupWindow.dismiss()
         }
         popupBinding.periodPopup2weekBtn.setOnClickListener {
             setting.analysisPeriod = 14
             binding.settingAnalysisPeriodTv.text = "2주"
+            setting.saveSettingData(pref)
             popupWindow.dismiss()
         }
         popupBinding.periodPopup3weekBtn.setOnClickListener {
             setting.analysisPeriod = 21
             binding.settingAnalysisPeriodTv.text = "3주"
+            setting.saveSettingData(pref)
             popupWindow.dismiss()
         }
         popupBinding.periodPopup4weekBtn.setOnClickListener {
             setting.analysisPeriod = 28
             binding.settingAnalysisPeriodTv.text = "4주"
+            setting.saveSettingData(pref)
             popupWindow.dismiss()
         }
-        // SharedPreferences에 분석기간 설정 저장
-        setting.saveSettingData(pref)
 
         popupWindow.elevation = 50f
         popupWindow.showAsDropDown(binding.settingAnalysisPeriodTv)
