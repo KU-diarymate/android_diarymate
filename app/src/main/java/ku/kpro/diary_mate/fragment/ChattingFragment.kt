@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.realm.Realm
@@ -18,6 +19,7 @@ import ku.kpro.diary_mate.data.ChatMessage
 import ku.kpro.diary_mate.data.DiaryMateSetting
 import ku.kpro.diary_mate.databinding.FragmentChattingBinding
 import ku.kpro.diary_mate.etc.ChatAdapter
+import ku.kpro.diary_mate.etc.Chatbot
 import ku.kpro.diary_mate.etc.DiaryMateApplication
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.addNewMessage
 import ku.kpro.diary_mate.etc.DiaryMateApplication.Companion.pref
@@ -33,6 +35,7 @@ class ChattingFragment : Fragment() {
     private lateinit var realm : Realm
     lateinit var chatAdapter: ChatAdapter
 
+    private var apiHandler = Chatbot()
     interface FabClickListener {
         fun onFabClick()
     }
@@ -66,8 +69,17 @@ class ChattingFragment : Fragment() {
 
         // 전송 버튼에 클릭 리스너를 등록합니다.
         binding.chattingSendBtn.setOnClickListener {
-            sendMessage()
-            Handler(Looper.getMainLooper()).postDelayed({ arriveMessage() }, 1000)
+            // 응답하는 부분
+            apiHandler.callApi_forchat(sendMessage(), object : Chatbot.ApiListener {
+                override fun onResponse(response: Any) {
+                    arriveMessage(response.toString())
+                }
+
+                override fun onFailure(error: String) {
+                    Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                }
+            })
+            //Handler(Looper.getMainLooper()).postDelayed({ arriveMessage("응답") }, 1000)
         }
 
         binding.fab.setOnClickListener {
@@ -90,7 +102,7 @@ class ChattingFragment : Fragment() {
     }
 
     // 메시지를 전송하는 메서드를 정의합니다.
-    private fun sendMessage() {
+    private fun sendMessage() : String {
         val messageText = binding.chattingMessageEt.text.toString()
         if (messageText.isNotEmpty()) {
             addMessage(messageText, "User")
@@ -98,10 +110,11 @@ class ChattingFragment : Fragment() {
             binding.chattingMessageEt.text.clear()
             binding.recyclerView.scrollToPosition(chatAdapter.itemCount - 1)
         }
+        return messageText
     }
 
-    private fun arriveMessage() {
-        addMessage("응답", "Chatbot")
+    private fun arriveMessage(msg : String) {
+        addMessage(msg, "Chatbot")
         chatAdapter.notifyItemInserted(messages.size - 1)
         binding.recyclerView.scrollToPosition(chatAdapter.itemCount - 1)
     }
@@ -120,21 +133,5 @@ class ChattingFragment : Fragment() {
         realm.copyToRealmOrUpdate(chat)
         realm.commitTransaction()
     }
-
-    /*override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is DiaryMateApplication) {
-            (context as DiaryMateApplication).currentChattingFragment = this
-            Log.e("ChattingFragment", "fragment attached")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        if (context is DiaryMateApplication) {
-            (context as DiaryMateApplication).currentChattingFragment = null
-            Log.e("ChattingFragment", "fragment detached")
-        }
-    }*/
 
 }

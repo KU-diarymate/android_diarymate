@@ -10,8 +10,3 @@ open class ChatMessage() : RealmObject(){
     var message : String = ""
     var date : String = ""
 }
-
-//data class ChatMessage(
-//    var sender : String,
-//    var message : String,
-//)
