@@ -92,6 +92,7 @@ class ChattingFragment : Fragment() {
                     val diary = realm.where(Diary::class.java).equalTo("date", dateString).findFirst() ?: Diary()
                     realm.beginTransaction()
                     if(diary.date.isNullOrEmpty()) diary.date = dateString
+                    diary.hashtags.clear()
                     diary.hashtags.addAll(response.toString().split(","))
                     realm.copyToRealmOrUpdate(diary)
                     realm.commitTransaction()

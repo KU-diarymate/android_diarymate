@@ -157,30 +157,6 @@ class DiaryActivity : AppCompatActivity() {
         }
     }
 
-//    private fun hashtagChat() {
-//        apiHandler.callApi_extract(diary.context , object : Chatbot.ApiListener {
-//            override fun onResponse(response: Any) {
-//                val hashtaglist = response.toString().split(",")
-//                for(tag in hashtaglist){
-//                    diary.hashtags.add(tag)
-//                }
-//                binding.diaryActivityHashtagRv.adapter?.notifyDataSetChanged()
-//                //response.toString() = hashtahslist
-//                apiHandler.callApi_classify(response.toString(), object : Chatbot.ApiListener {
-//                    override fun onResponse(response: Any) {
-//                        //여기에 분류된 키워드들 입력
-//                    }
-//                    override fun onFailure(error: String) {
-//                        Log.d("tintin", "onFailure: $error")
-//                        Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
-//                    }
-//                })
-//            }
-//            override fun onFailure(error: String) {
-//                Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
 
     private fun diarychat() {
         val realm = Realm.getDefaultInstance()
