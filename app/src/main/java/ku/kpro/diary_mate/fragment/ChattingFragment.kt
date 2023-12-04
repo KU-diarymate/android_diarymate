@@ -112,7 +112,7 @@ class ChattingFragment : Fragment() {
 
                 override fun onFailure(error: String) {
                     Log.d("tintin", "extract onFailure: $error")
-                    Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "입력 없음", Toast.LENGTH_SHORT).show()
                 }
             })
         }

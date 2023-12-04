@@ -72,7 +72,7 @@ class Chatbot() {
     }
 
     private val JSON = "application/json; charset=utf-8".toMediaType()
-    private val MY_SECRET_KEY = "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"
+    private val MY_SECRET_KEY = "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"
     private lateinit var client: OkHttpClient
 
     interface ApiListener {
@@ -179,13 +179,19 @@ class Chatbot() {
     }
 
     fun callApi_makeDiary(question: String, listener: ApiListener) {
+        Log.d("tintin", "question: $question")
+        if(question.isNullOrEmpty()){
+            listener.onFailure("callApi_makeDiary : Failed to load response due to No input")
+            return
+        }
+        Log.d("tintin", "Diary input : $question")
         GlobalScope.launch(Dispatchers.IO) {
             val arr = JSONArray()
             val baseAi = JSONObject()
             val userMsg = JSONObject()
             Log.d("tintin", "callApi_forchat: $question")
             var diaryPrompt = """
-            입력은 '$question' 
+            입력은 '$question'     1
             사용자의 대화를 ,,를 사용해서 구분지어 나타냈음.
             사용자의 대화를 기반으로 일기를 작성.
             어미를 “~했다. ~었다. ~았다” 와 같은 형식으로 맞추기.안녕, 잘가, 고마워. 또 보자 같은 인삿말을 무시.
@@ -269,6 +275,10 @@ class Chatbot() {
     }
 
     fun callApi_extract(question: String, listener: ApiListener) {
+        if(question.isNullOrEmpty()){
+            listener.onFailure("callApi_extract : Failed to load response due to No input")
+            return
+        }
         GlobalScope.launch(Dispatchers.IO) {
             val arr = JSONArray()
             val baseAi = JSONObject()
@@ -358,6 +368,10 @@ class Chatbot() {
     }
 
     fun callApi_classify(question: String, listener: ApiListener) {
+        if(question.isNullOrEmpty()){
+            listener.onFailure("callApi_classify : callApi_extract : Failed to load response due to No input")
+            return
+        }
         GlobalScope.launch(Dispatchers.IO) {
             val arr = JSONArray()
             val baseAi = JSONObject()

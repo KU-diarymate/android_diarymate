@@ -186,7 +186,7 @@ class DiaryActivity : AppCompatActivity() {
             }
             override fun onFailure(error: String) {
                 Log.d("tintin", "onFailure: $error")
-                Toast.makeText(context, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "입력 없음", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -227,8 +227,14 @@ class DiaryActivity : AppCompatActivity() {
                 val list2 = tmp[1].split(",")
                 diary.emotionalHashtags.clear()
                 diary.dailyHashtags.clear()
-                diary.dailyHashtags.addAll(list1)
-                diary.emotionalHashtags.addAll(list2)
+//                diary.dailyHashtags.addAll(list1)
+                for(dailyKeyword in list1){
+                    diary.dailyHashtags.add(dailyKeyword.trim())
+                }
+                for(emotionKeyword in list2){
+                    diary.emotionalHashtags.add(emotionKeyword.trim())
+                }
+//                diary.emotionalHashtags.addAll(list2)
 
                 saveDiary()
             }
