@@ -1,6 +1,7 @@
 package ku.kpro.diary_mate.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -189,6 +190,12 @@ class DiaryActivity : AppCompatActivity() {
                 Toast.makeText(context, "입력 없음", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onDestroy() {

@@ -72,7 +72,7 @@ class Chatbot() {
     }
 
     private val JSON = "application/json; charset=utf-8".toMediaType()
-    private val MY_SECRET_KEY = "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"
+    private val MY_SECRET_KEY = "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"
     private lateinit var client: OkHttpClient
 
     interface ApiListener {
@@ -191,7 +191,7 @@ class Chatbot() {
             val userMsg = JSONObject()
             Log.d("tintin", "callApi_forchat: $question")
             var diaryPrompt = """
-            입력은 '$question'     1
+            입력은 '$question'     
             사용자의 대화를 ,,를 사용해서 구분지어 나타냈음.
             사용자의 대화를 기반으로 일기를 작성.
             어미를 “~했다. ~었다. ~았다” 와 같은 형식으로 맞추기.안녕, 잘가, 고마워. 또 보자 같은 인삿말을 무시.
@@ -200,7 +200,6 @@ class Chatbot() {
             입력에 없는 내용을 창작해서 일기를 작성하지 말것.
             입력으로 들어온 내용 자체에 대한 간단한 변환은 가능하나 없는 말을 지어내거나 글을 지어쓰면 안됨.
             일기 작성에서 같은 내용을 여러번 사용하거나 비슷한 말을 반복하면 안됨.
-            사용자의 감정을 조금 부각시키는 내용 추가.
             """
 
             try {
@@ -402,6 +401,9 @@ class Chatbot() {
             예시5
             발표, 응원, 과제, 챗봇, 일기,떨리네, 고마워, 힘듦, 요약, 슬픔
             발표,과제,챗봇,일기,떨리네,요약:::응원,고마워,힘듦,슬픔
+            예시6
+            프로젝트, 발표, 마무리, 집, 지하철, 종강,떨림, 의심, 술, 무서움, 돈
+            프로젝트,발표,마무리,집,지하철,종강,술,돈:::떨림,의심,무서움
             
             사용자 입력은 '$question’
             """
@@ -525,7 +527,7 @@ class Chatbot() {
             예시 4
             * 시나리오 - 아침에 눈 뜨자마자 뭐 했어?
             * 키워드 - 커피, 학교, 과제, 시작
-            * 출력 - 아침에 눈을 뜨면서 어떤 일부터 시작했어? 
+            * 출력 - 아침에 눈을 뜨면서 어떤 일부터 시작했어?  
             
             예시 5
             * 시나리오 - 일어나서 가장 먼저 떠오른 생각이 뭐야?
